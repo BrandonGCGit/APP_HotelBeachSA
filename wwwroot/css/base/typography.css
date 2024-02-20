@@ -1,0 +1,8 @@
+﻿.simple-text {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.blue-text {
+    color: var(--clr-blue-200)
+}

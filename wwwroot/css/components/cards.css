@@ -1,0 +1,19 @@
+﻿.img-height {
+    height: 250px;
+    viewport-fit: cover;
+}
+
+.card-shadow {
+    box-shadow: 1px, 1px;
+}
+
+.bg-grey {
+    display: block;
+    background-color: var(--clr-grey-100);
+}
+
+.bg-white-outline {
+    display: block;
+    background-color: var(--clr-white);
+    border: 0.1rem solid var(--clr-blue-100);
+}

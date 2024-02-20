@@ -1,8 +1,87 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_EmptyLayout";
+}
+@{
+    var imgLogo = "./img/Logo.svg";
+
+    var carouselImg = "./img/BG.svg";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid position-relative p-0 m-0">
+    <!--    Carousel START-->
+    <div id="carouselExampleFade" class="carousel slide carousel-fade position-absolute top-0 start-0 vw-100 vh-100"
+         data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="carousel-caption text-center m-0 pb-5">
+                    <p class="text-white ff-italiana fs-1">Sunset Serenity</p>
+                    <p class="fs-5 ff-libre-franklin">
+                        Unwind in paradise as the sun dips below the horizon, casting a warm glow on the sandy shores.
+                        Experience tranquility at its finest.
+                        Hotel Amenities: Beachfront Lounge, Rooftop Bar, Spa Retreat
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-caption text-center m-0  pb-5">
+                    <p class="text-white ff-italiana fs-1">Golden Horizon Escape</p>
+                    <p class="fs-5 ff-libre-franklin">
+                        Indulge in the serenity of our coastal haven, where the golden hues of the sunset paint a
+                        picturesque scene against the tranquil backdrop of the ocean waves. Discover the ultimate
+                        retreat where luxury meets nature's beauty.
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-caption text-center m-0 pb-5">
+                    <p class="text-white ff-italiana fs-1">Coastal Bliss Retreat</p>
+                    <p class="fs-5 ff-libre-franklin">
+                        Embark on a journey of relaxation and rejuvenation amidst the coastal charm of our sanctuary.
+                        Let the gentle whispers of the sea breeze and the mesmerizing sunset hues wash away your
+                        worries. Discover serenity at its finest.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--    Carousel END-->
+    <!--    Content START-->
+    <div class="content">
+        <!--        Navbar START-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light bg-transparent border-bottom border-1 p-0">
+            <div class="container-fluid z-2">
+                <img src=@imgLogo class="navbar-brand img-fluid m-3" href="#" alt="">
+                <button class="navbar-toggler z-2 btn btn-close-white " type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav z-2">
+                        <li class="nav-item me-5 pe-4">
+                            <button type="button"
+                                    class="btn btn-lg btn-outline-light me-5 border-0 border-start border-end rounded-0 m-0 p-3 fs-4 ff-libre-franklin">
+                                Reservation
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--        Navbar START-->
+        <!--        Buttons Carousel START-->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+        <!--        Buttons Carousel END-->
+
+    </div>
+    <!--    Content END-->
 </div>

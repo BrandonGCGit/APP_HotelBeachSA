@@ -1,0 +1,20 @@
+﻿
+.btn-primary-org {
+    color: var(--clr-black);
+    background-color: var(--clr-orange-100);
+    border: 0.1rem solid var(--clr-orange-100);
+}
+
+    .btn-primary-org:hover {
+        background: none;
+    }
+
+.btn-primary-org-outline {
+    color: var(--clr-black);
+    background-color: none;
+    border: 0.1rem solid var(--clr-orange-100);
+}
+
+    .btn-primary-org-outline:hover {
+        background-color: var(--clr-orange-100);
+    }

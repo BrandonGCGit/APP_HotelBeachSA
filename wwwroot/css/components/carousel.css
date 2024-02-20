@@ -1,0 +1,105 @@
+﻿
+
+.bg-image {
+    background-image: url("../../img/BG.svg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.img-logo {
+    background-image: url("./img/Logo.svg");
+}
+
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.14); /* Color negro con 50% de opacidad */
+}
+
+.carousel {
+    z-index: -1; /* Asegura que el carousel esté detrás del contenido */
+}
+
+
+.content {
+    z-index: 1; /* Asegura que el contenido esté delante del carousel */
+}
+
+
+.z-0 {
+    z-index: 0;
+}
+
+.z-2 {
+    z-index: 2;
+}
+
+body {
+    overflow-y: hidden; /* Oculta la barra de desplazamiento vertical */
+}
+
+.carousel {
+    height: 100vh; /* Asegura que el carousel ocupe toda la altura de la ventana */
+}
+
+.content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto; /* Habilita el desplazamiento solo si el contenido es más grande que la ventana */
+}
+
+
+/*Styles*/
+/* Carousel styling */
+#carouselExampleFade,
+.carousel-inner,
+.carousel-item,
+.carousel-indicators,
+.carousel-item.active,
+.bg-configuration {
+    height: 100vh;
+}
+
+    .carousel-item:nth-child(1) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/BG.svg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .carousel-item:nth-child(2) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/BG-2.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .carousel-item:nth-child(3) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/BG-3.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+
+/* Height for devices larger than 576px */
+@media (min-width: 992px) {
+    #introCarousel {
+        margin-top: -58.59px;
+    }
+}
+
+.navbar .nav-link {
+    color: #fff !important;
+}
+
+.ff-italiana {
+    font-family: 'Italiana', sans-serif;
+}
+
+.ff-libre-franklin {
+    font-family: 'Libre Franklin', sans-serif;
+}

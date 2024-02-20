@@ -1,0 +1,13 @@
+﻿:root {
+    --clr-white: hsla(0, 0%, 100%);
+    --clr-black: hsla(0, 0%, 0%);
+    --clr-orange-100: hsla(27, 100%, 63%);
+    --clr-orange-200: hsla(18, 69%, 48%);
+    --clr-yellow-100: hsla(41, 100%, 79%);
+    --clr-yellow-200: hsla(36, 55%, 61%);
+    --clr-blue-100: hsla(223, 95%, 76%);
+    --clr-blue-200: hsla(238, 50%, 58%);
+    --clr-blue-300: hsla(218, 57%, 48%);
+    --clr-blue-400: hsla(230, 63%, 34%);
+    --clr-grey-100: hsla(0, 0%, 92%);
+}
