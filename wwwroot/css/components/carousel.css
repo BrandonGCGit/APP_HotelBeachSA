@@ -35,7 +35,7 @@
     z-index: 2;
 }
 
-body {
+.overflow-body {
     overflow-y: hidden; /* Oculta la barra de desplazamiento vertical */
 }
 
@@ -59,8 +59,8 @@ body {
 .carousel-inner,
 .carousel-item,
 .carousel-indicators,
-.carousel-item.active,
-.bg-configuration {
+.carousel-item.active
+ {
     height: 100vh;
 }
 
