@@ -35,61 +35,74 @@ namespace APP_HotelBeachSA.Controllers
             return View(listado);
         }
 
-        //// GET: Discounts/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Discounts/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var discount = await _context.Discount
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (discount == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var discount = new Discount();
 
-        //    return View(discount);
-        //}
+            HttpResponseMessage respuesta = await client.GetAsync($"/Descuentos/Consultar?id={id}");
 
-        //// GET: Discounts/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+            if (respuesta.IsSuccessStatusCode)
+            {
+                var resultado = respuesta.Content.ReadAsStringAsync().Result;
 
-        //// POST: Discounts/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Id_Usuario,Descuento,Noches,Fecha_Registro")] Discount discount)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(discount);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(discount);
-        //}
+                discount = JsonConvert.DeserializeObject<Discount>(resultado);
+            }
+            return View(discount);
+        }
 
-        //// GET: Discounts/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        //GET: Discounts/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        //    var discount = await _context.Discount.FindAsync(id);
-        //    if (discount == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(discount);
-        //}
+        // POST: Discounts/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //TODO: Tenemos que obtener el id del usuario con el SESSION
+        public async Task<IActionResult> create([Bind] Discount discount)
+        {
+            discount.Id = -1;
+            discount.Id_Usuario = "987654321";
+
+            var agregar = client.PostAsJsonAsync<Discount>("/Descuentos/Agregar", discount);
+            await agregar;
+
+            var resultado = agregar.Result;
+
+            if (resultado.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["MensajeDiscount"] = "No se logro registrar el descuento...";
+                return View(discount);
+            }
+        }
+
+        // GET: Discounts/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+
+            var discount = new Discount();
+
+            HttpResponseMessage response = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                discount = JsonConvert.DeserializeObject<Discount>(resultado);
+            }
+            return View(discount);
+        }
 
         //// POST: Discounts/Edit/5
         //// To protect from overposting attacks, enable the specific properties you want to bind to.
