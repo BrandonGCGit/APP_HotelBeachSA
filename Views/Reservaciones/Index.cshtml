@@ -1,7 +1,8 @@
-﻿
+﻿@model IEnumerable<APP_HotelBeachSA.Models.Paquete>
+
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_ReservacionesLayout.cshtml";
 }
 
 
@@ -18,78 +19,36 @@
             </div>
 
             <div class="row mt-5">
-                <div class="col-md-4 mt-0 mt-sm-3">
-                    <div class="card shadow-sm pb-3">
-                        <div class="img-height overflow-hidden">
-                            <img src="./img/All_included.jpg" class="card-img-top h-100 img-fluid overflow"
-                                 alt="All Included">
-                        </div>
-                        <div class="card-body px-4">
-                            <h5 class="card-title fw-bold  pt-2">All included</h5>
-                            <p class="card-text">
-                                Some quick example text to build on the card title and make up the bulk
-                                of the
-                                card's
-                                content.
-                            </p>
-                            <div class="d-flex mt-2">
-                                <div class="flex-grow-1">
-                                    <h3 class="">$400.000 <span class="small">xp</span> </h3>
-                                </div>
-                                <a asp-controller="Reservaciones" asp-action="Reservar" class="btn btn-primary-org fw-bold">Book now</a>
-                            </div>
 
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4 mt-0 mt-sm-3">
+                        <div class="card shadow-sm pb-3">
+                            <div class="img-height overflow-hidden">
+                                <img src="./img/All_included.jpg" class="card-img-top h-100 img-fluid overflow"
+                                     alt="All Included">
+                            </div>
+                            <div class="card-body px-4">
+                                <h5 class="card-title fw-bold  pt-2">@Html.DisplayFor(modelItem => item.Nombre)</h5>
+                                <p class="card-text">
+                                    Some quick example text to build on the card title and make up the bulk
+                                    of the
+                                    card's
+                                    content.
+                                </p>
+                                <div class="d-flex mt-2">
+                                    <div class="flex-grow-1">
+                                        <h3 class="">$@Html.DisplayFor(modelItem => item.Costo_Persona)<span class="small">xp</span> </h3>
+                                    </div>
+                                    <a asp-controller="Reservaciones" asp-action="Reservar" class="btn btn-primary-org fw-bold">Book now</a>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 mt-0 mt-sm-3">
-                    <div class="card shadow-sm pb-3">
-                        <div class="img-height overflow-hidden">
-                            <img src="./img/Meals_included.jpg" class="card-img-top h-100 img-fluid overflow"
-                                 alt="All Included">
-                        </div>
-                        <div class="card-body px-4">
-                            <h5 class="card-title fw-bold  pt-2">All included</h5>
-                            <p class="card-text">
-                                Some quick example text to build on the card title and make up the bulk
-                                of the
-                                card's
-                                content.
-                            </p>
-                            <div class="d-flex mt-2">
-                                <div class="flex-grow-1">
-                                    <h3 class="">$400.000 <span class="small">xp</span> </h3>
-                                </div>
-                                <a asp-controller="Reservaciones" asp-action="Reservar" class="btn btn-primary-org fw-bold">Book now</a>
-                            </div>
+                }
 
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-0 mt-sm-3">
-                    <div class="card shadow-sm pb-3">
-                        <div class="img-height overflow-hidden">
-                            <img src="./img/Lodging.jpg" class="card-img-top h-100 img-fluid overflow "
-                                 alt="All Included">
-                        </div>
-                        <div class="card-body px-4">
-                            <h5 class="card-title fw-bold  pt-2">All included</h5>
-                            <p class="card-text">
-                                Some quick example text to build on the card title and make up the bulk
-                                of the
-                                card's
-                                content.
-                            </p>
-                            <div class="d-flex mt-2">
-                                <div class="flex-grow-1">
-                                    <h3 class="">$400.000 <span class="small">xp</span> </h3>
-                                </div>
-                                <a asp-controller="Reservaciones" asp-action="Reservar" class="btn btn-primary-org fw-bold">Book now</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                
             </div>
 
         </main>
