@@ -31,8 +31,9 @@ namespace APP_HotelBeachSA.Models
                 // Configuración del correo
                 MailMessage mail = new MailMessage
                 {
-                    From = new MailAddress("Lenguajes2023G2@outlook.com"),
-                    Subject = "Datos de registro en plataforma web biblioteca UCR",
+                    From = new MailAddress("beach.hotel.App@outlook.com"),
+                    Subject = "Datos de registro en Hotel Beach",
+                    Body = "A continuacion se adjunta un documento con la informacion de su reserva. En caso de presntar algun error, por favor comunicarse nuestra operadora. Muchas gracias",
                     IsBodyHtml = true
                 };
 
