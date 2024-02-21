@@ -5,14 +5,16 @@ namespace APP_HotelBeachSA.Models
     public class Cliente
     {
         [Key]
-        public int Id { get; set; }
-        public string Id_Cliente { get; set; }
-        public int Id_Paquete { get; set; }
-        public int Id_Descuento { get; set; }
-        public int Huespedes { get; set; }
-        public decimal Total { get; set; }
-        public DateTime Entrada { get; set; }
-        public DateTime Salida { get; set; }
+        public string Cedula { get; set; }
+        public string Tipo_Cedula { get; set; }
+        public string Nombre { get; set; }
+        public string Primer_Apellido { get; set; }
+        public string Segundo_Apellido { get; set; }
+        public int Telefono { get; set; }
+        public string Direccion { get; set; }
+        public string Email { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime Fecha_Registro { get; set; }
     }
 }

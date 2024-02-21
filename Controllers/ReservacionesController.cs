@@ -37,9 +37,25 @@ namespace APP_HotelBeachSA.Controllers
             return View(listado);            
         }
 
-        public IActionResult Reservar()
-        {
+        [HttpGet]
+        public IActionResult CrearReservacion()
+        {            
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CrearReservacion([Bind]SuperReservacion superReservacion)
+        {
+            //Confirmacion(superReservacion);
+            return RedirectToAction("Confirmacion", "ReservacionesController", superReservacion);
+        }
+
+        [HttpGet]
+        public IActionResult Confirmacion(SuperReservacion superReservacion)
+        {
+            return View(superReservacion);
+        }
+
     }
 }
