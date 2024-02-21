@@ -9,6 +9,7 @@
         public Paquete Paquete { get; set; }
         public Pago Pago { get; set; }
         public Cheque Cheque { get; set; }
+        public Discount Discount { get; set; }
        
     }
 }
