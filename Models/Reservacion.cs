@@ -11,8 +11,14 @@ namespace APP_HotelBeachSA.Models
         public int Id_Descuento { get; set; }
         public int Huespedes { get; set; }
         public decimal Total { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime Entrada { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime Salida { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime Fecha_Registro { get; set; }
     }
 }

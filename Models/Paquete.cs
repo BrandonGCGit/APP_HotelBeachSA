@@ -11,6 +11,8 @@ namespace APP_HotelBeachSA.Models
         public decimal Costo_Persona { get; set; }
         public int Adelanto { get; set; }
         public int Terminos_Pago { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime Fecha_Registro { get; set; }
     }
 }
