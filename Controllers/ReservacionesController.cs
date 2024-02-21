@@ -11,6 +11,8 @@ namespace APP_HotelBeachSA.Controllers
         //Variable para manejar la referencia del object  HttpcClient
         private HttpClient httpClient;
 
+        private static int idPaquete;
+
         public ReservacionesController()
         {
             hotelBeachAPI = new HotelBeachAPI();
@@ -34,26 +36,46 @@ namespace APP_HotelBeachSA.Controllers
                 //Se toman los datos en JSON se convierte en un listado de objecto
                 listado = JsonConvert.DeserializeObject<List<Paquete>>(resultados);
             }
-            return View(listado);            
+            return View(listado);
+        }
+
+        [HttpPost]
+        public IActionResult Index([Bind] Paquete paquete)
+        {
+            return View(paquete);
         }
 
         [HttpGet]
-        public IActionResult CrearReservacion()
-        {            
+        public IActionResult CrearReservacion(int id)
+        {
+            idPaquete = id;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearReservacion([Bind]SuperReservacion superReservacion)
+        public async Task<IActionResult> CrearReservacion([Bind] SuperReservacion superReservacion)
         {
-            //Confirmacion(superReservacion);
-            return RedirectToAction("Confirmacion", "ReservacionesController", superReservacion);
+            // Almacenar el objeto superReservacion en TempData
+            TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+            return RedirectToAction("Confirmacion", "Reservaciones");
         }
 
         [HttpGet]
-        public IActionResult Confirmacion(SuperReservacion superReservacion)
+        public async Task<IActionResult> Confirmacion()
         {
+            // Recuperar el objeto superReservacion desde TempData
+            string superReservacionJson = TempData["SuperReservacion"] as string;
+            SuperReservacion superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
+
+            HttpResponseMessage response = await httpClient.GetAsync($"api/Paquetes/Constultar?id={idPaquete}");
+            if (response.IsSuccessStatusCode)
+            {
+                var paquete = response.Content.ReadAsStringAsync().Result;
+
+                //Se convierte el JSON en un Object
+                superReservacion.Paquete = JsonConvert.DeserializeObject<Paquete>(paquete);
+            }
             return View(superReservacion);
         }
 
