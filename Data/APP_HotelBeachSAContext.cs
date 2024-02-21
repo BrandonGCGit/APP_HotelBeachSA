@@ -15,5 +15,7 @@ namespace APP_HotelBeachSA.Data
         }
 
         public DbSet<APP_HotelBeachSA.Models.Discount> Discount { get; set; } = default!;
+        public DbSet<APP_HotelBeachSA.Models.Paquete> Paquete { get; set; } = default!;
+        public DbSet<APP_HotelBeachSA.Models.Pago> Pago { get; set; } = default!;
     }
 }
