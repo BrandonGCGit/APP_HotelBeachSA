@@ -15,5 +15,8 @@ namespace APP_HotelBeachSA.Data
         }
 
         public DbSet<APP_HotelBeachSA.Models.Discount> Discount { get; set; } = default!;
+        public DbSet<APP_HotelBeachSA.Models.Rol> Rol { get; set; } = default!;
+
+
     }
 }
