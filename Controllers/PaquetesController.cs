@@ -4,38 +4,38 @@ using Newtonsoft.Json;
 
 namespace APP_HotelBeachSA.Controllers
 {
-    public class DiscountsController : Controller
+    public class PaquetesController : Controller
     {
 
         private HotelBeachAPI hotelBeachAPI;
 
         private HttpClient client;
 
-        public DiscountsController()
+        public PaquetesController()
         {
             hotelBeachAPI = new HotelBeachAPI();
 
             client = hotelBeachAPI.Inicial();
         }
 
-        // GET: Discounts
+        // GET: Paquetes
         public async Task<IActionResult> Index()
         {
 
-            List<Discount> listado = new List<Discount>();
+            List<Paquete> listado = new List<Paquete>();
 
-            HttpResponseMessage response = await client.GetAsync("/Descuentos/Listado");
+            HttpResponseMessage response = await client.GetAsync("/api/Paquetes/Listado");
 
             if (response.IsSuccessStatusCode)
             {
                 var resultados = response.Content.ReadAsStringAsync().Result;
 
-                listado = JsonConvert.DeserializeObject<List<Discount>>(resultados);
+                listado = JsonConvert.DeserializeObject<List<Paquete>>(resultados);
             }
             return View(listado);
         }
 
-        // GET: Discounts/Details/5
+        // GET: Paquetes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,20 +43,20 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
-            var discount = new Discount();
+            var paquete = new Paquete();
 
-            HttpResponseMessage respuesta = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+            HttpResponseMessage respuesta = await client.GetAsync($"/api/Paquetes/Constultar?id={id}");
 
             if (respuesta.IsSuccessStatusCode)
             {
                 var resultado = respuesta.Content.ReadAsStringAsync().Result;
 
-                discount = JsonConvert.DeserializeObject<Discount>(resultado);
+                paquete = JsonConvert.DeserializeObject<Paquete>(resultado);
             }
-            return View(discount);
+            return View(paquete);
         }
 
-        //GET: Discounts/Create
+        //GET: Paquete/Create
         public IActionResult Create()
         {
             return View();
@@ -66,13 +66,13 @@ namespace APP_HotelBeachSA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //TODO: Tenemos que obtener el id del usuario con el SESSION
-        public async Task<IActionResult> Create([Bind] Discount discount)
+        public async Task<IActionResult> Create([Bind] Paquete paquete)
         {
-            discount.Id = 0;
-            discount.Id_Usuario = "987654321";
-            discount.Fecha_Registro = DateTime.Now;
+            paquete.Id = 0;
+            paquete.Id_Usuario = "987654321";
+            paquete.Fecha_Registro = DateTime.Now;
 
-            var agregar = client.PostAsJsonAsync<Discount>("/Descuentos/Agregar", discount);
+            var agregar = client.PostAsJsonAsync<Paquete>("/api/Paquetes/Crear", paquete);
 
             await agregar;
 
@@ -84,41 +84,39 @@ namespace APP_HotelBeachSA.Controllers
             }
             else
             {
-                TempData["MensajeDiscount"] = "No se logro registrar el descuento...";
-                return View(discount);
+                TempData["MensajeDiscount"] = "No se logro registrar el paquete...";
+                return View(paquete);
             }
         }
 
-        // GET: Discounts/Edit/5
+        // GET: Paquete/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
 
-            var discount = new Discount();
+            var paquete = new Paquete();
 
-            HttpResponseMessage response = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+            HttpResponseMessage response = await client.GetAsync($"/api/Paquetes/Constultar?id={id}");
 
             if (response.IsSuccessStatusCode)
             {
                 var resultado = response.Content.ReadAsStringAsync().Result;
 
-                discount = JsonConvert.DeserializeObject<Discount>(resultado);
+                paquete = JsonConvert.DeserializeObject<Paquete>(resultado);
             }
-            return View(discount);
+            return View(paquete);
         }
 
         // POST: Discounts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Id_Usuario,Descuento,Noches,Fecha_Registro")] Discount discount)
+        public async Task<IActionResult> Edit(int id, [Bind] Paquete paquete)
         {
-            if (id != discount.Id)
+            if (id != paquete.Id)
             {
                 return NotFound();
             }
 
-            var modificar = client.PutAsJsonAsync<Discount>("/Descuentos/Modificar", discount);
+            var modificar = client.PutAsJsonAsync<Paquete>($"/api/Paquetes/Editar?id={id}", paquete);
 
             await modificar;
 
@@ -131,7 +129,7 @@ namespace APP_HotelBeachSA.Controllers
             else
             {
                 TempData["Mensaje"] = "Datos Incorrectos";
-                return View(discount);
+                return View(paquete);
             }
         }
 
@@ -143,17 +141,17 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
-            var discount = new Discount();
+            var paquete = new Paquete();
 
-            HttpResponseMessage response = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+            HttpResponseMessage response = await client.GetAsync($"/api/Paquetes/Constultar?id={id}");
 
             if (response.IsSuccessStatusCode)
             {
                 var resultado = response.Content.ReadAsStringAsync().Result;
 
-                discount = JsonConvert.DeserializeObject<Discount>(resultado);
+                paquete = JsonConvert.DeserializeObject<Paquete>(resultado);
             }
-            return View(discount);
+            return View(paquete);
         }
 
         // POST: Discounts/Delete/5
@@ -161,7 +159,7 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            HttpResponseMessage response = await client.DeleteAsync($"/Descuentos/Eliminar?id={id}");
+            HttpResponseMessage response = await client.DeleteAsync($"/api/Paquetes/Eliminar?id={id}");
             return RedirectToAction(nameof(Index));
         }
     }

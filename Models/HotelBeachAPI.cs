@@ -8,6 +8,7 @@
             var client = new HttpClient();
 
             client.BaseAddress = new Uri("http://www.ApiBeachHotel.somee.com");
+            //client.BaseAddress = new Uri("https://localhost:7216/");
 
             return client;
         }
