@@ -66,12 +66,14 @@ namespace APP_HotelBeachSA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //TODO: Tenemos que obtener el id del usuario con el SESSION
-        public async Task<IActionResult> create([Bind] Discount discount)
+        public async Task<IActionResult> Create([Bind] Discount discount)
         {
-            discount.Id = -1;
+            discount.Id = 0;
             discount.Id_Usuario = "987654321";
+            discount.Fecha_Registro = DateTime.Now;
 
             var agregar = client.PostAsJsonAsync<Discount>("/Descuentos/Agregar", discount);
+
             await agregar;
 
             var resultado = agregar.Result;
@@ -104,77 +106,63 @@ namespace APP_HotelBeachSA.Controllers
             return View(discount);
         }
 
-        //// POST: Discounts/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Id_Usuario,Descuento,Noches,Fecha_Registro")] Discount discount)
-        //{
-        //    if (id != discount.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        // POST: Discounts/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Id_Usuario,Descuento,Noches,Fecha_Registro")] Discount discount)
+        {
+            if (id != discount.Id)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(discount);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!DiscountExists(discount.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(discount);
-        //}
+            var modificar = client.PutAsJsonAsync<Discount>("/Descuentos/Modificar", discount);
 
-        //// GET: Discounts/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+            await modificar;
 
-        //    var discount = await _context.Discount
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (discount == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var resultado = modificar.Result;
 
-        //    return View(discount);
-        //}
+            if (resultado.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Mensaje"] = "Datos Incorrectos";
+                return View(discount);
+            }
+        }
 
-        //// POST: Discounts/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var discount = await _context.Discount.FindAsync(id);
-        //    if (discount != null)
-        //    {
-        //        _context.Discount.Remove(discount);
-        //    }
+        // GET: Discounts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+            var discount = new Discount();
 
-        //private bool DiscountExists(int id)
-        //{
-        //    return _context.Discount.Any(e => e.Id == id);
-        //}
+            HttpResponseMessage response = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                discount = JsonConvert.DeserializeObject<Discount>(resultado);
+            }
+            return View(discount);
+        }
+
+        // POST: Discounts/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            HttpResponseMessage response = await client.DeleteAsync($"/Descuentos/Eliminar?id=3");
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

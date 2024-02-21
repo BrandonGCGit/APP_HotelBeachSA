@@ -18,7 +18,7 @@ namespace APP_HotelBeachSA.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult IndexAdmin()
         {
             return View();
         }
