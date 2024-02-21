@@ -68,7 +68,7 @@ namespace APP_HotelBeachSA.Controllers
             string superReservacionJson = TempData["SuperReservacion"] as string;
             SuperReservacion superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
 
-            HttpResponseMessage response = await httpClient.GetAsync($"api/Paquetes/Constultar?id={idPaquete}");
+            HttpResponseMessage response = await httpClient.GetAsync($"api/Paquetes/Consultar?id={idPaquete}");
             if (response.IsSuccessStatusCode)
             {
                 var paquete = response.Content.ReadAsStringAsync().Result;
@@ -76,6 +76,54 @@ namespace APP_HotelBeachSA.Controllers
                 //Se convierte el JSON en un Object
                 superReservacion.Paquete = JsonConvert.DeserializeObject<Paquete>(paquete);
             }
+
+
+            //Calculo de Noches
+            // Calcula la diferencia de días entre las fechas de entrada y salida
+            TimeSpan diferencia = superReservacion.Reservacion.Salida.Subtract(superReservacion.Reservacion.Entrada);
+
+            // Obtiene la cantidad de noches redondeando hacia arriba
+            int cantidadNoches = (int)Math.Ceiling(diferencia.TotalDays);
+
+            if(cantidadNoches >= 3 && cantidadNoches <= 6)
+            {
+                /// total = (noches * precioPaquete) / descuento
+            }
+            else if(cantidadNoches >= 7 &&  cantidadNoches <= 9)
+            {
+                ////
+            }
+            else if(cantidadNoches >= 10 && cantidadNoches <= 12)
+            {
+                ///
+            }
+            else if(cantidadNoches >= 13)
+            {
+                ///
+            }
+            else
+            {
+                /// total = noche * paquetes
+            }
+
+            //Para llenar los campos de PAGO
+
+            superReservacion.Pago.Fecha_Registro = DateTime.Now;
+            switch (superReservacion.Pago.Tipo_Pago)
+            {
+                case 'K':
+                    superReservacion.Pago.Numero_Pago = 0;
+                    break;
+                case 'T':                    
+                    break;
+                case 'C':
+                    superReservacion.Cheque.Id = superReservacion.Pago.Numero_Pago;
+                    superReservacion.Cheque.Estado = 'A';
+                    break;
+            }
+
+
+
             return View(superReservacion);
         }
 

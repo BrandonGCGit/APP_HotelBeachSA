@@ -10,6 +10,7 @@ namespace APP_HotelBeachSA.Models
         public int Id_Paquete { get; set; }
         public int Id_Descuento { get; set; }
         public int Huespedes { get; set; }
+        public int Noches { get; set; }
         public decimal Total { get; set; }
 
         [DataType(DataType.DateTime)]
