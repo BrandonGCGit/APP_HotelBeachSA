@@ -29,15 +29,15 @@ function showCheckInfo() {
 
 
     switch (selectedOption) {
-        case '1':
+        case 'K':
             document.getElementById('card-payment').style.display = 'none';
             document.getElementById('check-payment').style.display = 'none';
             break
-        case '2':
+        case 'T':
             document.getElementById('card-payment').style.display = 'block';
             document.getElementById('check-payment').style.display = 'none';
             break
-        case '3':
+        case 'C':
             document.getElementById('check-payment').style.display = 'block';
             document.getElementById('card-payment').style.display = 'none';
             break

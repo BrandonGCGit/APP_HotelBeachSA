@@ -69,7 +69,7 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Create([Bind] Paquete paquete)
         {
             paquete.Id = 0;
-            paquete.Id_Usuario = "987654321";
+            paquete.Id_Usuario = "208140785";
             paquete.Fecha_Registro = DateTime.Now;
 
             var agregar = client.PostAsJsonAsync<Paquete>("/api/Paquetes/Crear", paquete);
