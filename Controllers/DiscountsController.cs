@@ -69,10 +69,10 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Create([Bind] Discount discount)
         {
             discount.Id = 0;
-            discount.Id_Usuario = "987654321";
+            discount.Id_Usuario = "208140785";
             discount.Fecha_Registro = DateTime.Now;
 
-            var agregar = client.PostAsJsonAsync<Discount>("/Descuentos/Agregar", discount);
+            var agregar = client.PostAsJsonAsync<Discount>("api/Descuentos/Agregar", discount);
 
             await agregar;
 

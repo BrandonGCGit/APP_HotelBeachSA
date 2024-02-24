@@ -1,0 +1,50 @@
+﻿@model APP_HotelBeachSA.Models.Cliente
+@{
+    ViewData["Title"] = "CheckId";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+    <div class="row w-100">
+        <h1 class="ff-italiana fw-bold mb-5 ms-0">Check Identification Number</h1>
+        <div class="col-md-4 mx-auto bg-grey rounded p-4">
+
+            <form asp-action="CheckId">
+                <!-- Error message -->
+                @if (TempData["Mensaje"] != null)
+                {
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Mensaje! ->->-></strong> @TempData["Mensaje"]
+                        <button type="button" class="btn-close ff-libre-franklin" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <h5 class="text-center ff-libre-franklin fw-normal mb-4">Please enter your Identification Number to reservación</h5>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <img src="/img/Icons/ID-Card.png" alt="ID Icon">
+                        </span>
+                        <input asp-for="Cedula" class="form-control ff-libre-franklin fw-light" placeholder="Identification Number" />
+                    </div>
+                    <span asp-validation-for="Cedula" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group mb-2">
+                    <input type="submit" value="Continue" class="btn btn-primary-org ff-libre-franklin form-control fw-bold" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
