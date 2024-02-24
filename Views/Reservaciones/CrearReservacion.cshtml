@@ -16,7 +16,7 @@
 
                     <div id="information-circle"
                          class="circle-outline d-flex justify-content-center align-items-center me-3">
-                        <p class="d-inline align-self-center fw-bold m-0">3</p>
+                        <p class="d-inline align-self-center fw-bold m-0">1</p>
                     </div>
                     <div class="d-flex align-items-center">
                         <h6 class="lead d-inline align-middle fw-bold m-0">Information</h6>
@@ -25,7 +25,7 @@
                     <p class="d-inline align-self-center horizontal-line mx-4"></p>
 
                     <div id="dates-circle" class="circle d-flex justify-content-center align-items-center me-3">
-                        <p class="d-inline align-self-center fw-bold m-0">1</p>
+                        <p class="d-inline align-self-center fw-bold m-0">2</p>
                     </div>
                     <div class="d-flex align-items-center">
                         <h6 class="lead d-inline align-middle fw-bold m-0">Dates</h6>
@@ -35,15 +35,12 @@
 
                     <div id="payment-circle"
                          class="circle-outline d-flex justify-content-center align-items-center me-3">
-                        <p class="d-inline align-self-center fw-bold m-0">2</p>
+                        <p class="d-inline align-self-center fw-bold m-0">3</p>
                     </div>
                     <div class="d-flex align-items-center">
                         <h6 class="lead d-inline align-middle fw-bold m-0">Payment</h6>
                     </div>
 
-                    
-
-                    
 
                 </div>
 
@@ -84,7 +81,7 @@
                                     class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
                                 Next
                             </button>
-                            <button asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+                            <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
                         </div>
 
 
@@ -139,11 +136,70 @@
                                     class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
                                 Next
                             </button>
-                            <button asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+                            <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
                         </div>
 
+                        <!-- Container for Client Info -->
+                        @* <div id="client">
+                            <h3 class="fw-bold">Please fill out the information</h3>
 
-                        
+                            <div class="mb-3 col-5">
+                                <label asp-for="Cliente.Cedula" class="control-label pb-2">Cédula</label>
+                                <input asp-for="Cliente.Cedula" class="form-control">
+                                <span asp-validation-for="Cliente.Cedula" class="text-danger"></span>
+                            </div>
+                            <div class="d-flex gap-4 mt-4">
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Cliente.Tipo_Cedula" class="control-label pb-2">Tipo de Cédula</label>
+                                    <input asp-for="Cliente.Tipo_Cedula" class="form-control">
+                                    <span asp-validation-for="Cliente.Tipo_Cedula" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Cliente.Nombre" class="control-label pb-2">Nombre</label>
+                                    <input asp-for="Cliente.Nombre" class="form-control">
+                                    <span asp-validation-for="Cliente.Nombre" class="text-danger"></span>
+                                </div>                                
+                            </div>
+
+                            <div class="d-flex gap-4 mt-4">
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Cliente.Primer_Apellido" class="control-label pb-2">Primer Apellido</label>
+                                    <input asp-for="Cliente.Primer_Apellido" class="form-control">
+                                    <span asp-validation-for="Cliente.Primer_Apellido" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Cliente.Segundo_Apellido" class="control-label pb-2">Segundo Apellido</label>
+                                    <input asp-for="Cliente.Segundo_Apellido" class="form-control">
+                                    <span asp-validation-for="Cliente.Segundo_Apellido" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-4 mt-4">
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Cliente.Email" class="control-label pb-2">Email</label>
+                                    <input asp-for="Cliente.Email" class="form-control">
+                                    <span asp-validation-for="Cliente.Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Cliente.Telefono" class="control-label pb-2">Teléfono</label>
+                                    <input asp-for="Cliente.Telefono" class="form-control">
+                                    <span asp-validation-for="Cliente.Telefono" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-5">
+                                <label asp-for="Cliente.Direccion" class="control-label pb-2">Dirección</label>
+                                <input asp-for="Cliente.Direccion" class="form-control">
+                                <span asp-validation-for="Cliente.Direccion" class="text-danger"></span>
+                            </div>
+                            
+
+                            <button onclick=""
+                                    class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
+                                Next
+                            </button>
+                            <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+                        </div> *@
 
 
                     </form>
