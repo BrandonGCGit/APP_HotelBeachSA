@@ -57,6 +57,12 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="AdminReservaciones" asp-action="Index">Reservaciones</a>
                                 </li>
                             }
+                            if (User.IsInRole("Usuarios"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                </li>
+                            }
                         }
                     </ul>
                     <ul>

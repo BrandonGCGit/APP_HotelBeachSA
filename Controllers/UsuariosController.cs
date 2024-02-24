@@ -14,7 +14,7 @@ namespace APP_HotelBeachSA.Controllers
 
         private HotelBeachAPI hotelBeachAPI;
 
-        private HttpClient httpClient;
+        private HttpClient client;
 
         private ServicesHotelBeachAPI servicesAPI;
 
@@ -22,10 +22,155 @@ namespace APP_HotelBeachSA.Controllers
         {
             hotelBeachAPI = new HotelBeachAPI();
 
-            httpClient = hotelBeachAPI.Inicial();
+            client = hotelBeachAPI.Inicial();
 
             servicesAPI = new ServicesHotelBeachAPI();
         }
+
+        //CRUD USUARIOS START
+        // GET: api/Usuarios/Listado
+        public async Task<IActionResult> Index()
+        {
+
+            List<Usuario> listado = new List<Usuario>();
+
+            HttpResponseMessage response = await client.GetAsync("/api/Usuarios/Listado");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultados = response.Content.ReadAsStringAsync().Result;
+
+                listado = JsonConvert.DeserializeObject<List<Usuario>>(resultados);
+            }
+            return View(listado);
+        }
+
+        // GET: /api/Usuarios/Consultar?Cedula=
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var usuario = new Usuario();
+
+            HttpResponseMessage respuesta = await client.GetAsync($"/api/Usuarios/Consultar?Cedula={id}");
+
+            if (respuesta.IsSuccessStatusCode)
+            {
+                var resultado = respuesta.Content.ReadAsStringAsync().Result;
+
+                usuario = JsonConvert.DeserializeObject<Usuario>(resultado);
+            }
+            return View(usuario);
+        }
+
+        //GET: Usuarios/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: /api/Usuarios/Agregar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //TODO: Tenemos que obtener el id del usuario con el SESSION
+        public async Task<IActionResult> Create([Bind] Usuario usuario)
+        {
+            usuario.FechaRegistro = DateTime.Now;
+
+            var agregar = client.PostAsJsonAsync<Usuario>("/api/Usuarios/Agregar", usuario);
+
+            await agregar;
+
+            var resultado = agregar.Result;
+
+            if (resultado.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["MensajeDiscount"] = "No se logro registrar el paquete...";
+                return View(usuario);
+            }
+        }
+
+        // GET: Paquete/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+
+            var usuario = new Usuario();
+
+            HttpResponseMessage response = await client.GetAsync($"/api/Usuarios/Consultar?Cedula={id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                usuario = JsonConvert.DeserializeObject<Usuario>(resultado);
+            }
+            return View(usuario);
+        }
+
+        // POST: /api/Usuarios/Modificar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind] Usuario usuario)
+        {
+            if (id != usuario.Cedula)
+            {
+                return NotFound();
+            }
+
+            var modificar = client.PutAsJsonAsync<Usuario>($"/api/Usuarios/Modificar", usuario);
+
+            await modificar;
+
+            var resultado = modificar.Result;
+
+            if (resultado.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Mensaje"] = "Datos Incorrectos";
+                return View(usuario);
+            }
+        }
+
+        // GET: /api/Usuarios/Eliminar?Cedula=
+        public async Task<IActionResult> Delete(string? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var usuario = new Usuario();
+
+            HttpResponseMessage response = await client.GetAsync($"/api/Usuarios/Consultar?Cedula={id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                usuario = JsonConvert.DeserializeObject<Usuario>(resultado);
+            }
+            return View(usuario);
+        }
+
+        // POST: /api/Usuarios/Eliminar?Cedula=
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            HttpResponseMessage response = await client.DeleteAsync($"/api/Usuarios/Eliminar?Cedula={id}");
+            return RedirectToAction(nameof(Index));
+        }
+        //CRUD USUARIOS END
 
         public IActionResult Login()
         {
@@ -42,7 +187,7 @@ namespace APP_HotelBeachSA.Controllers
                 return View();
             }
 
-            HttpResponseMessage response = await httpClient.PostAsync($"/api/Usuarios/Autenticar?email={usuario.Email}&password={usuario.Password}", null);
+            HttpResponseMessage response = await client.PostAsync($"/api/Usuarios/Autenticar?email={usuario.Email}&password={usuario.Password}", null);
 
             if (response.IsSuccessStatusCode)
             {
