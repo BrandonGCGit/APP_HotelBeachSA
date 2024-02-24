@@ -1,4 +1,5 @@
-﻿using APP_HotelBeachSA.Models;
+﻿using APP_HotelBeachSA.Model;
+using APP_HotelBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -11,11 +12,15 @@ namespace APP_HotelBeachSA.Controllers
 
         private HttpClient client;
 
+        private ServicesHotelBeachAPI servicesAPI;
+
         public DiscountsController()
         {
             hotelBeachAPI = new HotelBeachAPI();
 
             client = hotelBeachAPI.Inicial();
+
+            servicesAPI = new ServicesHotelBeachAPI();
         }
 
         // GET: Discounts
@@ -24,7 +29,7 @@ namespace APP_HotelBeachSA.Controllers
 
             List<Discount> listado = new List<Discount>();
 
-            HttpResponseMessage response = await client.GetAsync("api/Descuentos/Listado");
+            HttpResponseMessage response = await client.GetAsync("Descuentos/Listado");
 
             if (response.IsSuccessStatusCode)
             {
@@ -45,7 +50,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var discount = new Discount();
 
-            HttpResponseMessage respuesta = await client.GetAsync($"api/Descuentos/Consultar?id={id}");
+            HttpResponseMessage respuesta = await client.GetAsync($"Descuentos/Consultar?id={id}");
 
             if (respuesta.IsSuccessStatusCode)
             {
@@ -68,11 +73,21 @@ namespace APP_HotelBeachSA.Controllers
         //TODO: Tenemos que obtener el id del usuario con el SESSION
         public async Task<IActionResult> Create([Bind] Discount discount)
         {
+
             discount.Id = 0;
-            discount.Id_Usuario = "208140785";
             discount.Fecha_Registro = DateTime.Now;
 
-            var agregar = client.PostAsJsonAsync<Discount>("api/Descuentos/Agregar", discount);
+
+            //var usuario = new Usuario();
+            var email = HttpContext.Session.GetString("email");
+
+            var usuario = servicesAPI.getUsuarioPorEmail(email);
+
+
+            discount.Id_Usuario = usuario.Result.Cedula;
+
+
+            var agregar = client.PostAsJsonAsync<Discount>("Descuentos/Agregar", discount);
 
             await agregar;
 
@@ -95,7 +110,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var discount = new Discount();
 
-            HttpResponseMessage response = await client.GetAsync($"api/Descuentos/Consultar?id={id}");
+            HttpResponseMessage response = await client.GetAsync($"Descuentos/Consultar?id={id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -121,7 +136,7 @@ namespace APP_HotelBeachSA.Controllers
 
             discount.Id_Usuario = cedula_Usuario;
 
-            var modificar = client.PutAsJsonAsync<Discount>("api/Descuentos/Modificar", discount);
+            var modificar = client.PutAsJsonAsync<Discount>("Descuentos/Modificar", discount);
 
             await modificar;
 
@@ -148,7 +163,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var discount = new Discount();
 
-            HttpResponseMessage response = await client.GetAsync($"api/Descuentos/Consultar?id={id}");
+            HttpResponseMessage response = await client.GetAsync($"Descuentos/Consultar?id={id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -164,7 +179,7 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            HttpResponseMessage response = await client.DeleteAsync($"api/Descuentos/Eliminar?id={id}");
+            HttpResponseMessage response = await client.DeleteAsync($"Descuentos/Eliminar?id={id}");
             return RedirectToAction(nameof(Index));
         }
     }

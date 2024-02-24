@@ -24,21 +24,39 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="IndexAdmin">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Discounts" asp-action="Index">Descuentos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Paquetes" asp-action="Index">Paquetes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Pagos" asp-action="Index">Pagos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cheques" asp-action="Index">Cheques</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminReservaciones" asp-action="Index">Reservaciones</a>
-                            </li>
+                            if (User.IsInRole("Descuentos"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Discounts" asp-action="Index">Descuentos</a>
+                                </li>
+
+                            }
+                            if (User.IsInRole("Paquetes"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paquetes" asp-action="Index">Paquetes</a>
+                                </li>
+
+                            }
+                            if (User.IsInRole("Pagos"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Pagos" asp-action="Index">Pagos</a>
+                                </li>
+                            }
+                            if (User.IsInRole("Cheques"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Cheques" asp-action="Index">Cheques</a>
+                                </li>
+
+                            }
+                            if (User.IsInRole("Reservaciones"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminReservaciones" asp-action="Index">Reservaciones</a>
+                                </li>
+                            }
                         }
                     </ul>
                     <ul>

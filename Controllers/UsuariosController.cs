@@ -16,11 +16,15 @@ namespace APP_HotelBeachSA.Controllers
 
         private HttpClient httpClient;
 
+        private ServicesHotelBeachAPI servicesAPI;
+
         public UsuariosController()
         {
             hotelBeachAPI = new HotelBeachAPI();
 
             httpClient = hotelBeachAPI.Inicial();
+
+            servicesAPI = new ServicesHotelBeachAPI();
         }
 
         public IActionResult Login()
@@ -51,12 +55,25 @@ namespace APP_HotelBeachSA.Controllers
             {
 
                 HttpContext.Session.SetString("token", autorizacion.Token);
-                HttpContext.Session.SetString("cedula", usuario.Email);
+                HttpContext.Session.SetString("email", usuario.Email);
+
+                var usuarioId_rol = servicesAPI.getUsuarioPorEmail(usuario.Email).Result.Id_Rol;
+
+
+                var rolesPermitidos = servicesAPI.ConsultarRol(usuarioId_rol).Result.Funciones;
+
+                var rolesArray = rolesPermitidos.Split(',').Select(x => x.Trim()).ToArray();
+
+
 
 
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.Name, usuario.Email));
 
+                foreach (var rol in rolesArray)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, rol));
+                }
                 var principal = new ClaimsPrincipal(identity);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
