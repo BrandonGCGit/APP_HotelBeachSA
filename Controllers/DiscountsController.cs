@@ -24,7 +24,7 @@ namespace APP_HotelBeachSA.Controllers
 
             List<Discount> listado = new List<Discount>();
 
-            HttpResponseMessage response = await client.GetAsync("/Descuentos/Listado");
+            HttpResponseMessage response = await client.GetAsync("api/Descuentos/Listado");
 
             if (response.IsSuccessStatusCode)
             {
@@ -45,7 +45,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var discount = new Discount();
 
-            HttpResponseMessage respuesta = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+            HttpResponseMessage respuesta = await client.GetAsync($"api/Descuentos/Consultar?id={id}");
 
             if (respuesta.IsSuccessStatusCode)
             {
@@ -95,7 +95,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var discount = new Discount();
 
-            HttpResponseMessage response = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+            HttpResponseMessage response = await client.GetAsync($"api/Descuentos/Consultar?id={id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -117,8 +117,11 @@ namespace APP_HotelBeachSA.Controllers
             {
                 return NotFound();
             }
+            var cedula_Usuario = HttpContext.Session.GetString("cedula");
 
-            var modificar = client.PutAsJsonAsync<Discount>("/Descuentos/Modificar", discount);
+            discount.Id_Usuario = cedula_Usuario;
+
+            var modificar = client.PutAsJsonAsync<Discount>("api/Descuentos/Modificar", discount);
 
             await modificar;
 
@@ -145,7 +148,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var discount = new Discount();
 
-            HttpResponseMessage response = await client.GetAsync($"/Descuentos/Consultar?id={id}");
+            HttpResponseMessage response = await client.GetAsync($"api/Descuentos/Consultar?id={id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -161,7 +164,7 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            HttpResponseMessage response = await client.DeleteAsync($"/Descuentos/Eliminar?id={id}");
+            HttpResponseMessage response = await client.DeleteAsync($"api/Descuentos/Eliminar?id={id}");
             return RedirectToAction(nameof(Index));
         }
     }

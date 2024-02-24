@@ -49,7 +49,9 @@ namespace APP_HotelBeachSA.Controllers
 
             if (autorizacion != null)
             {
+
                 HttpContext.Session.SetString("token", autorizacion.Token);
+                HttpContext.Session.SetString("cedula", usuario.Email);
 
 
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
