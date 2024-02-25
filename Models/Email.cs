@@ -10,19 +10,58 @@ namespace APP_HotelBeachSA.Models
 {
     public class Email
     {
-        public void Enviar(Reservacion reserva, Cliente cliente)
+        public void Enviar(SuperReservacion superReservacion)
         {
             try
             {
-                //var htmlContent = $@"
-
-                //    <p>Fecha Entrada: {reserva.Entrada}</p>
-                //    <p>Fecha Entrada: {reserva.Salida}</p>
-                //    <p>Fecha Entrada: {reserva.Total}</p>
-                //    ";
 
                 var htmlContent = $@"
-                    <p>Prueba</p>";
+                
+                <body>
+                    <div class=""container"">
+                        <h1>Reservation</h1>
+                        <h4>Thank you for selecting us</h4>
+
+                        <div>    
+                           <h5>Information about the Reservation</h5>
+                           <p>Check-in: {superReservacion.Reservacion.Entrada}</p>
+                           <p>Check-out: {superReservacion.Reservacion.Salida}</p>
+                           <p>Number of guests: {superReservacion.Reservacion.Huespedes}</p>
+                           <p>Nights: {superReservacion.Reservacion.Noches}</p>
+                           <p>Total: {superReservacion.Reservacion.Total}</p>
+                        </div>
+
+                        <div>    
+                           <h5>Information about the Package</h5>
+                           <p>Package: {superReservacion.Paquete.Nombre}</p>
+                           <p>Cost per person: {superReservacion.Paquete.Costo_Persona}</p>
+                           <p>Advance %: {superReservacion.Paquete.Adelanto}</p>
+                           <p>Terms: {superReservacion.Paquete.Terminos_Pago}</p>
+                        </div>
+
+                         <div>    
+                           <h5>Information about the Payment</h5>
+                           <p>Type of Payment: {superReservacion.TipoPago}</p>
+                           <p>Number of payment: {superReservacion.Pago.Numero_Pago}</p>
+                           <p>Cost per person: {superReservacion.CostoPersona}</p>
+                           <p>Total Cost: {superReservacion.CostoTotal}</p>
+                           <p>Iva: {superReservacion.Iva}</p>
+                           <p>Discount: {superReservacion.MontoDescuento}</p>
+                           <p>Total Price: {superReservacion.Reservacion.Total}</p>
+                           <p>Colones: {superReservacion.MontoColones}</p>
+                           <p>Advance: {superReservacion.Adelanto}</p>
+                        </div>
+
+                        <div>    
+                           <h5>We are waiting for you</h5>
+                           <p>Feel free to contact us</p>
+                           <p>Email: beach.hotel.App@outlook.com</p>
+                        </div>        
+
+                    </div>
+                </body>
+                </html>";
+
 
 
                 // Generar PDF
@@ -39,7 +78,7 @@ namespace APP_HotelBeachSA.Models
 
 
 
-                mail.To.Add(cliente.Email);
+                mail.To.Add("dianaqb09@gmail.com");
                 mail.To.Add("beach.hotel.App@outlook.com");
 
                 // Adjuntar PDF
@@ -54,7 +93,7 @@ namespace APP_HotelBeachSA.Models
                 {
                     smtp.EnableSsl = true;
                     smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new NetworkCredential("beach.hotel.App@outlook.com", "abdy.Beach2024");
+                    smtp.Credentials = new NetworkCredential("beach.hotel.App@outlook.com", "abdy.Beach.2024");
                     smtp.Send(mail);
                 }
 

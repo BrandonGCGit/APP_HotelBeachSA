@@ -1,0 +1,32 @@
+﻿@model APP_HotelBeachSA.Models.SuperReservacion
+
+@{
+    ViewData["Title"] = "RegistrarDB";
+    Layout = "~/Views/Shared/_ReservacionesLayout.cshtml";
+}
+
+
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            <div class="mt-4 d-block bg-grey mx-auto p-5 rounded">
+
+                @if (TempData["Mensaje"] != null)
+                {
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Mensaje! </strong> @TempData["Mensaje"].                       
+                    </div>
+                    <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Go Back</a>
+
+                }
+            </div>
+
+        </main>
+    </div>
+
+
+</body>
+
+
+

@@ -5,71 +5,15 @@
     Layout = "~/Views/Shared/_ReservacionesLayout.cshtml";
 }
 
-<h1>Confirmacion</h1>
-
-<h4>SuperReservacion</h4>
-<hr />
-<div class="row">
-
-
-    <div class="mt-4 d-block bg-grey col-md-7 p-5 rounded">
-        
-    </div>
-
-</div>
-
-
 <body>
     <div class="container">
-        <main role="main" class="pb-3">
-            <h1 class="mt-4">Reservation</h1>
-
-            <!-- Container for Reservation Steps -->
-            <div class="mt-4 col-md-7">
-                <div class="d-flex">
-
-                    <div id="information-circle"
-                         class="circle-outline d-flex justify-content-center align-items-center me-3">
-                        <p class="d-inline align-self-center fw-bold m-0">3</p>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <h6 class="lead d-inline align-middle fw-bold m-0">Information</h6>
-                    </div>
-
-                    <p class="d-inline align-self-center horizontal-line mx-4"></p>
-
-                    <div id="dates-circle" class="circle d-flex justify-content-center align-items-center me-3">
-                        <p class="d-inline align-self-center fw-bold m-0">1</p>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <h6 class="lead d-inline align-middle fw-bold m-0">Dates</h6>
-                    </div>
-
-                    <p class="d-inline align-self-center horizontal-line mx-4"></p>
-
-                    <div id="payment-circle"
-                         class="circle-outline d-flex justify-content-center align-items-center me-3">
-                        <p class="d-inline align-self-center fw-bold m-0">2</p>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <h6 class="lead d-inline align-middle fw-bold m-0">Payment</h6>
-                    </div>
-
-
-
-
-
-                </div>
-
-            </div>
-
-
+        <main role="main" class="pb-3">               
 
             <div class="row gap-4">
 
                 <div class="mt-4 d-block bg-grey col-md-7 p-5 rounded">
 
-                    <form asp-action="Confirmacion">
+                    
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <!-- Container for Comfirmation -->
                         <div id="confirmation">
@@ -82,12 +26,12 @@
                                     <div class="d-flex">
                                         <div class="col">
                                             <p class="small simple-text fw-light">Check-in</p>
-                                            <p class="fw-bold">@Model.Reservacion.Entrada</p>
+                                        <p class="fw-bold">@Model.Reservacion.Entrada.Day/@Model.Reservacion.Entrada.Month/@Model.Reservacion.Entrada.Year  @Model.Reservacion.Entrada.TimeOfDay </p>
                                         </div>
                                         <p class="px-3 vertical-line"></p>
                                         <div class="col">
                                             <p class="small simple-text fw-light">Check-out</p>
-                                            <p class="fw-bold">@Model.Reservacion.Salida</p>
+                                        <p class="fw-bold">@Model.Reservacion.Salida.Day/@Model.Reservacion.Salida.Month/@Model.Reservacion.Salida.Year  @Model.Reservacion.Salida.TimeOfDay</p>
                                         </div>
                                     </div>
 
@@ -113,7 +57,7 @@
                                 <div class="ms-4 col-4 bg-white-outline px-3 pt-3 rounded my-4">
                                     <div class="">
                                         <p class="small simple-text fw-light">Type of Payment</p>
-                                        <p class="fw-bold">@Model.Pago.Tipo_Pago</p>
+                                        <p class="fw-bold">@Model.TipoPago</p>
                                     </div>
                                     <div class="">
                                         <p class="small simple-text fw-light">Payment Number</p>
@@ -121,7 +65,7 @@
                                     </div>
                                     <div class="">
                                         <p class="small simple-text fw-light">Date</p>
-                                        <p class="fw-bold">@Model.Pago.Fecha_Registro</p>
+                                    <p class="fw-bold">@Model.Pago.Fecha_Registro.Day/@Model.Pago.Fecha_Registro.Month/@Model.Pago.Fecha_Registro.Year</p>
                                     </div>
                                 </div>
 
@@ -130,38 +74,43 @@
                             <!-- Price Info -->
                             <div class="col-7">
                                 <h6 class="fw-bold mt-2">Price Summary</h6>
-                                <div class="d-flex pb-0">
-                                    <p class="flex-grow-1 simple-text">Guests</p>
-                                    <p class="simple-text">$@Model.CostoPersona</p>
+                                <div class="d-flex">
+                                    <p class="flex-grow-1 simple-text">Per Person</p>
+                                    <p class="simple-text">$@Model.CostoPersona.ToString("F")</p>
                                 </div>
                                 <div class="d-flex">
-                                    <p class="flex-grow-1 simple-text">Discount</p>
-                                    <p class="simple-text">- $@Model.MontoDescuento</p>
+                                    <p class="flex-grow-1 simple-text">Total</p>
+                                    <p class="simple-text">$@Model.CostoTotal.ToString("F")</p>
                                 </div>
                                 <div class="d-flex">
                                     <p class="flex-grow-1 simple-text">%Iva</p>
-                                    <p class="simple-text">$@Model.Iva</p>
+                                    <p class="simple-text">$@Model.Iva.ToString("F")</p>
                                 </div>
-
-                                <div class="d-flex mt-3">
-                                    <p class="lead blue-text flex-grow-1">Advance</p>
-                                    <p class="lead blue-text">$@Model.Adelanto</p>
+                                <div class="d-flex pb-2">
+                                    <p class="flex-grow-1 simple-text">Discount</p>
+                                    <p class="simple-text">- $@Model.MontoDescuento.ToString("F")</p>
                                 </div>
+                               
                                 <div class="d-flex ">
                                     <h5 class="fw-bold blue-text flex-grow-1 m-0">Total Price</h5>
-                                    <h5 class="fw-bold blue-text m-0">$@Model.Reservacion.Total</h5>
+                                    <h5 class="fw-bold blue-text m-0">$@Model.Reservacion.Total.ToString("F")</h5>
                                 </div>
                                 <div class="d-flex">
-                                    <p class="blue-text flex-grow-1">Colones</p>
-                                    <p class="blue-text">794 829,85</p>
+                                    <p class="blue-text flex-grow-1 m-0">Colones</p>
+                                <p class="blue-text m-0">@Model.MontoColones.ToString("C")</p>
+                                </div>
+                                <hr class="my-1" />
+                                <div class="d-flex mt-1">
+                                    <p class="blue-text flex-grow-1">Advance</p>
+                                    <p class="blue-text">$@Model.Adelanto.ToString("F")</p>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn fw-bold btn-primary-org mt-4 px-4 me-2">Book</button>
-                            <button asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+                            <a asp-controller="Reservaciones" asp-action="RegistrarDB" class="btn fw-bold btn-primary-org mt-4 px-4 me-2">Book</a>
+                            <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
 
                         </div>
-                    </form>
+                   
                     
                                         
                 </div>

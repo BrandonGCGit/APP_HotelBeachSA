@@ -13,9 +13,11 @@
 
         public decimal Adelanto { get; set; }
         public decimal CostoPersona { get; set; }
+        public decimal CostoTotal { get; set; }
         public decimal MontoDescuento { get; set; }
         public decimal Iva { get; set; }
         public decimal MontoColones { get; set; }
+        public string TipoPago { get; set; }
 
     }
 }

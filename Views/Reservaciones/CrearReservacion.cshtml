@@ -51,7 +51,7 @@
             <div class="row gap-4">
 
                 <div class="mt-4 d-block bg-grey col-md-7 p-5 rounded">
-                    
+
 
                     <form asp-action="CrearReservacion">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -81,7 +81,7 @@
                                     class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
                                 Next
                             </button>
-                            <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+                            <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
                         </div>
 
 
@@ -93,7 +93,6 @@
                                     <label asp-for="Pago.Tipo_Pago" class="control-label pb-2">Type of Payment</label>
                                     <select asp-for="Pago.Tipo_Pago" id="type-payment" onchange="showCheckInfo()" class="form-select"
                                             aria-label="Type of Payment">
-                                        <option selected>Select type of Payment</option>
                                         <option value="K">Cash</option>
                                         <option value="T">Card</option>
                                         <option value="C">Check</option>
@@ -132,73 +131,73 @@
                                 </div>
                             </div>
 
-                            <button type="submit" @* onclick="changeToConfirmation()" *@
+                            <button type="submit"
                                     class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
                                 Next
                             </button>
-                            <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+                            <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
                         </div>
 
                         <!-- Container for Client Info -->
                         @* <div id="client">
-                            <h3 class="fw-bold">Please fill out the information</h3>
+                        <h3 class="fw-bold">Please fill out the information</h3>
 
-                            <div class="mb-3 col-5">
-                                <label asp-for="Cliente.Cedula" class="control-label pb-2">Cédula</label>
-                                <input asp-for="Cliente.Cedula" class="form-control">
-                                <span asp-validation-for="Cliente.Cedula" class="text-danger"></span>
-                            </div>
-                            <div class="d-flex gap-4 mt-4">
-                                <div class="mb-3 col-5">
-                                    <label asp-for="Cliente.Tipo_Cedula" class="control-label pb-2">Tipo de Cédula</label>
-                                    <input asp-for="Cliente.Tipo_Cedula" class="form-control">
-                                    <span asp-validation-for="Cliente.Tipo_Cedula" class="text-danger"></span>
-                                </div>
-                                <div class="mb-3 col-5">
-                                    <label asp-for="Cliente.Nombre" class="control-label pb-2">Nombre</label>
-                                    <input asp-for="Cliente.Nombre" class="form-control">
-                                    <span asp-validation-for="Cliente.Nombre" class="text-danger"></span>
-                                </div>                                
-                            </div>
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Cedula" class="control-label pb-2">Cédula</label>
+                        <input asp-for="Cliente.Cedula" class="form-control">
+                        <span asp-validation-for="Cliente.Cedula" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex gap-4 mt-4">
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Tipo_Cedula" class="control-label pb-2">Tipo de Cédula</label>
+                        <input asp-for="Cliente.Tipo_Cedula" class="form-control">
+                        <span asp-validation-for="Cliente.Tipo_Cedula" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Nombre" class="control-label pb-2">Nombre</label>
+                        <input asp-for="Cliente.Nombre" class="form-control">
+                        <span asp-validation-for="Cliente.Nombre" class="text-danger"></span>
+                        </div>
+                        </div>
 
-                            <div class="d-flex gap-4 mt-4">
-                                <div class="mb-3 col-5">
-                                    <label asp-for="Cliente.Primer_Apellido" class="control-label pb-2">Primer Apellido</label>
-                                    <input asp-for="Cliente.Primer_Apellido" class="form-control">
-                                    <span asp-validation-for="Cliente.Primer_Apellido" class="text-danger"></span>
-                                </div>
-                                <div class="mb-3 col-5">
-                                    <label asp-for="Cliente.Segundo_Apellido" class="control-label pb-2">Segundo Apellido</label>
-                                    <input asp-for="Cliente.Segundo_Apellido" class="form-control">
-                                    <span asp-validation-for="Cliente.Segundo_Apellido" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <div class="d-flex gap-4 mt-4">
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Primer_Apellido" class="control-label pb-2">Primer Apellido</label>
+                        <input asp-for="Cliente.Primer_Apellido" class="form-control">
+                        <span asp-validation-for="Cliente.Primer_Apellido" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Segundo_Apellido" class="control-label pb-2">Segundo Apellido</label>
+                        <input asp-for="Cliente.Segundo_Apellido" class="form-control">
+                        <span asp-validation-for="Cliente.Segundo_Apellido" class="text-danger"></span>
+                        </div>
+                        </div>
 
-                            <div class="d-flex gap-4 mt-4">
-                                <div class="mb-3 col-5">
-                                    <label asp-for="Cliente.Email" class="control-label pb-2">Email</label>
-                                    <input asp-for="Cliente.Email" class="form-control">
-                                    <span asp-validation-for="Cliente.Email" class="text-danger"></span>
-                                </div>
-                                <div class="mb-3 col-5">
-                                    <label asp-for="Cliente.Telefono" class="control-label pb-2">Teléfono</label>
-                                    <input asp-for="Cliente.Telefono" class="form-control">
-                                    <span asp-validation-for="Cliente.Telefono" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <div class="d-flex gap-4 mt-4">
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Email" class="control-label pb-2">Email</label>
+                        <input asp-for="Cliente.Email" class="form-control">
+                        <span asp-validation-for="Cliente.Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Telefono" class="control-label pb-2">Teléfono</label>
+                        <input asp-for="Cliente.Telefono" class="form-control">
+                        <span asp-validation-for="Cliente.Telefono" class="text-danger"></span>
+                        </div>
+                        </div>
 
-                            <div class="mb-3 col-5">
-                                <label asp-for="Cliente.Direccion" class="control-label pb-2">Dirección</label>
-                                <input asp-for="Cliente.Direccion" class="form-control">
-                                <span asp-validation-for="Cliente.Direccion" class="text-danger"></span>
-                            </div>
-                            
+                        <div class="mb-3 col-5">
+                        <label asp-for="Cliente.Direccion" class="control-label pb-2">Dirección</label>
+                        <input asp-for="Cliente.Direccion" class="form-control">
+                        <span asp-validation-for="Cliente.Direccion" class="text-danger"></span>
+                        </div>
 
-                            <button onclick=""
-                                    class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
-                                Next
-                            </button>
-                            <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+
+                        <button onclick=""
+                        class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
+                        Next
+                        </button>
+                        <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
                         </div> *@
 
 
