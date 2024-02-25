@@ -1,6 +1,7 @@
 ﻿using APP_HotelBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace APP_HotelBeachSA.Controllers
 {
@@ -63,31 +64,31 @@ namespace APP_HotelBeachSA.Controllers
         }
 
         // POST: Discounts/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         //TODO: Tenemos que obtener el id del usuario con el SESSION
-        // public async Task<IActionResult> Create([Bind] Pago pago)
-        // {
-        //     paquete.Id = 0;
-        //     paquete.Id_Usuario = "987654321";
-        //     paquete.Fecha_Registro = DateTime.Now;
+        public async Task<IActionResult> Create([Bind] Cheque cheque)
+        {
+            cheque.Id = 0;
 
-        //     var agregar = client.PostAsJsonAsync<Paquete>("/api/Paquetes/Crear", paquete);
 
-        //     await agregar;
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            var agregar = client.PostAsJsonAsync<Cheque>("/api/Cheques/Agregar", cheque);
 
-        //     var resultado = agregar.Result;
+            await agregar;
 
-        //     if (resultado.IsSuccessStatusCode)
-        //     {
-        //         return RedirectToAction("Index");
-        //     }
-        //     else
-        //     {
-        //         TempData["MensajeDiscount"] = "No se logro registrar el paquete...";
-        //         return View(paquete);
-        //     }
-        // }
+            var resultado = agregar.Result;
+
+            if (resultado.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["MensajeDiscount"] = "No se logro registrar el paquete...";
+                return View(cheque);
+            }
+        }
 
         // GET: Pago/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -95,6 +96,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var cheque = new Cheque();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.GetAsync($"/api/Cheques/Consultar?Id={id}");
 
             if (response.IsSuccessStatusCode)
@@ -115,6 +117,7 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             var modificar = client.PutAsJsonAsync<Cheque>($"/api/Cheques/Modificar", cheque);
 
             await modificar;
@@ -142,6 +145,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var cheque = new Cheque();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.GetAsync($"/api/Cheques/Consultar?Id={id}");
 
             if (response.IsSuccessStatusCode)
@@ -158,8 +162,22 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.DeleteAsync($"/api/Cheques/Eliminar?Id={id}");
             return RedirectToAction(nameof(Index));
+        }
+
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return autorizacion;
         }
     }
 }

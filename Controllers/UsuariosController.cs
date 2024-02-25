@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace APP_HotelBeachSA.Controllers
@@ -32,6 +33,8 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Index()
         {
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             List<Usuario> listado = new List<Usuario>();
 
             HttpResponseMessage response = await client.GetAsync("/api/Usuarios/Listado");
@@ -52,6 +55,9 @@ namespace APP_HotelBeachSA.Controllers
             {
                 return NotFound();
             }
+
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var usuario = new Usuario();
 
@@ -78,6 +84,9 @@ namespace APP_HotelBeachSA.Controllers
         //TODO: Tenemos que obtener el id del usuario con el SESSION
         public async Task<IActionResult> Create([Bind] Usuario usuario)
         {
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             usuario.FechaRegistro = DateTime.Now;
 
             var agregar = client.PostAsJsonAsync<Usuario>("/api/Usuarios/Agregar", usuario);
@@ -101,6 +110,9 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Edit(string? id)
         {
 
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var usuario = new Usuario();
 
             HttpResponseMessage response = await client.GetAsync($"/api/Usuarios/Consultar?Cedula={id}");
@@ -123,6 +135,8 @@ namespace APP_HotelBeachSA.Controllers
             {
                 return NotFound();
             }
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var modificar = client.PutAsJsonAsync<Usuario>($"/api/Usuarios/Modificar", usuario);
 
@@ -148,6 +162,8 @@ namespace APP_HotelBeachSA.Controllers
             {
                 return NotFound();
             }
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var usuario = new Usuario();
 
@@ -237,6 +253,18 @@ namespace APP_HotelBeachSA.Controllers
             await HttpContext.SignOutAsync();// Cerrar Sesion
             HttpContext.Session.SetString("token", "");//Se borra el token
             return RedirectToAction("Index", "Home");//Se ubica al usuario en la pagina de inicio
+        }
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return autorizacion;
         }
 
     }

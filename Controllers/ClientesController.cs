@@ -1,6 +1,7 @@
 ﻿using APP_HotelBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace APP_HotelBeachSA.Controllers
 {
@@ -22,6 +23,7 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Index()
         {
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             List<Cliente> listado = new List<Cliente>();
 
             HttpResponseMessage response = await client.GetAsync("/api/Clientes/Listado");
@@ -43,6 +45,8 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             var cliente = new Cliente();
 
             HttpResponseMessage respuesta = await client.GetAsync($"/api/Clientes/Consultar?cedula={id}");
@@ -70,6 +74,7 @@ namespace APP_HotelBeachSA.Controllers
         {
             cliente.Fecha_Registro = DateTime.Now;
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             var agregar = client.PostAsJsonAsync<Cliente>("/api/Clientes/Crear", cliente);
 
             await agregar;
@@ -93,6 +98,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var cliente = new Cliente();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.GetAsync($"/api/Clientes/Consultar?cedula={id}");
 
             if (response.IsSuccessStatusCode)
@@ -114,6 +120,7 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             var modificar = client.PutAsJsonAsync<Cliente>($"/api/Clientes/Editar?cedula={id}", cliente);
 
             await modificar;
@@ -141,6 +148,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var cliente = new Cliente();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.GetAsync($"/api/Clientes/Consultar?cedula={id}");
 
             if (response.IsSuccessStatusCode)
@@ -157,6 +165,7 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.DeleteAsync($"/api/Clientes/Eliminar?cedula={id}");
             return RedirectToAction(nameof(Index));
         }
@@ -207,5 +216,17 @@ namespace APP_HotelBeachSA.Controllers
             return View(model);
         }
 
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return autorizacion;
+        }
     }
 }

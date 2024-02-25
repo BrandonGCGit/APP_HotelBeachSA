@@ -1,5 +1,6 @@
 ﻿using APP_HotelBeachSA.Model;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace APP_HotelBeachSA.Models
 {

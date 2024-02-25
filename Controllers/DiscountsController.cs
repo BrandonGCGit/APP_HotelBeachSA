@@ -2,6 +2,7 @@
 using APP_HotelBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace APP_HotelBeachSA.Controllers
 {
@@ -27,6 +28,8 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Index()
         {
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             List<Discount> listado = new List<Discount>();
 
             HttpResponseMessage response = await client.GetAsync("Descuentos/Listado");
@@ -43,10 +46,14 @@ namespace APP_HotelBeachSA.Controllers
         // GET: Discounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
+
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var discount = new Discount();
 
@@ -73,6 +80,8 @@ namespace APP_HotelBeachSA.Controllers
         //TODO: Tenemos que obtener el id del usuario con el SESSION
         public async Task<IActionResult> Create([Bind] Discount discount)
         {
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             discount.Id = 0;
             discount.Fecha_Registro = DateTime.Now;
@@ -108,6 +117,9 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
 
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var discount = new Discount();
 
             HttpResponseMessage response = await client.GetAsync($"Descuentos/Consultar?id={id}");
@@ -132,6 +144,9 @@ namespace APP_HotelBeachSA.Controllers
             {
                 return NotFound();
             }
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var cedula_Usuario = HttpContext.Session.GetString("cedula");
 
             discount.Id_Usuario = cedula_Usuario;
@@ -161,6 +176,9 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var discount = new Discount();
 
             HttpResponseMessage response = await client.GetAsync($"Descuentos/Consultar?id={id}");
@@ -179,8 +197,23 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.DeleteAsync($"Descuentos/Eliminar?id={id}");
             return RedirectToAction(nameof(Index));
+        }
+
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return autorizacion;
         }
     }
 }

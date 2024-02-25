@@ -1,6 +1,7 @@
 ﻿using APP_HotelBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace APP_HotelBeachSA.Controllers
 {
@@ -20,6 +21,9 @@ namespace APP_HotelBeachSA.Controllers
 
         public async Task<IActionResult> Index()
         {
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             List<Rol> listado = new List<Rol>();
 
             HttpResponseMessage response = await client.GetAsync("/api/Roles/Listado");
@@ -44,6 +48,7 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Create([Bind] Rol rol)
         {
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             rol.Fecha_Registro = DateTime.Now;
 
             var agregar = client.PostAsJsonAsync<Rol>("/api/Roles/Agregar", rol);
@@ -57,7 +62,7 @@ namespace APP_HotelBeachSA.Controllers
             }
             else
             {
-                
+
                 TempData["Mensaje"] = "No se logró registrar el rol.";
 
                 //se ubica al usuairo dnetro de la view crear con los datos del libro
@@ -68,10 +73,14 @@ namespace APP_HotelBeachSA.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
+
+
             if (id == null)
             {
                 return NotFound();
             }
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var rol = new Rol();
 
@@ -92,6 +101,8 @@ namespace APP_HotelBeachSA.Controllers
             {
                 return NotFound();
             }
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var rol = new Rol();
 
@@ -156,6 +167,18 @@ namespace APP_HotelBeachSA.Controllers
                 TempData["Mensaje"] = "Datos Incorrectos";
                 return View(rol);
             }
+        }
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return autorizacion;
         }
 
     }
