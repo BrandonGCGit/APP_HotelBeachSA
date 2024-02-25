@@ -1,6 +1,7 @@
 ﻿using APP_HotelBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace APP_HotelBeachSA.Controllers
 {
@@ -22,6 +23,9 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Index()
         {
 
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             List<Pago> listado = new List<Pago>();
 
             HttpResponseMessage response = await client.GetAsync("/api/Pagos/Listado");
@@ -42,6 +46,9 @@ namespace APP_HotelBeachSA.Controllers
             {
                 return NotFound();
             }
+
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var pago = new Pago();
 
@@ -93,6 +100,9 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
 
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var pago = new Pago();
 
             HttpResponseMessage response = await client.GetAsync($"/api/Pagos/Consultar?Id={id}");
@@ -111,6 +121,10 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind] Pago pago)
         {
+
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             if (id != pago.Id)
             {
                 return NotFound();
@@ -141,6 +155,9 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var pago = new Pago();
 
             HttpResponseMessage response = await client.GetAsync($"/api/Pagos/Consultar?Id={id}");
@@ -159,8 +176,22 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.DeleteAsync($"/api/Pagos/Eliminar?Id={id}");
             return RedirectToAction(nameof(Index));
+        }
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return autorizacion;
         }
     }
 }

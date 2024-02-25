@@ -1,6 +1,7 @@
 ﻿using APP_HotelBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace APP_HotelBeachSA.Controllers
 {
@@ -24,6 +25,7 @@ namespace APP_HotelBeachSA.Controllers
 
             List<Reservacion> listado = new List<Reservacion>();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.GetAsync("/api/Reservaciones/Listado");
 
             if (response.IsSuccessStatusCode)
@@ -45,6 +47,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var reservacion = new Reservacion();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage respuesta = await client.GetAsync($"/api/Reservaciones/Consultar?Id={id}");
 
             if (respuesta.IsSuccessStatusCode)
@@ -71,6 +74,7 @@ namespace APP_HotelBeachSA.Controllers
             reservacion.Id = 0;
             reservacion.Fecha_Registro = DateTime.Now;
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             var agregar = client.PostAsJsonAsync<Reservacion>("/api/Reservaciones/Agregar", reservacion);
 
             await agregar;
@@ -94,6 +98,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var reservacion = new Reservacion();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.GetAsync($"/api/Reservaciones/Consultar?Id={id}");
 
             if (response.IsSuccessStatusCode)
@@ -114,6 +119,7 @@ namespace APP_HotelBeachSA.Controllers
                 return NotFound();
             }
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             var modificar = client.PutAsJsonAsync<Reservacion>($"/api/Reservaciones/Modificar", reservacion);
 
             await modificar;
@@ -141,6 +147,7 @@ namespace APP_HotelBeachSA.Controllers
 
             var reservacion = new Reservacion();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.GetAsync($"/api/Reservaciones/Consultar?Id={id}");
 
             if (response.IsSuccessStatusCode)
@@ -157,8 +164,21 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
             HttpResponseMessage response = await client.DeleteAsync($"/api/Reservaciones/Eliminar?Id={id}");
             return RedirectToAction(nameof(Index));
+        }
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return autorizacion;
         }
     }
 }

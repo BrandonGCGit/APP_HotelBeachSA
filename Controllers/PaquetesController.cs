@@ -11,11 +11,15 @@ namespace APP_HotelBeachSA.Controllers
 
         private HttpClient client;
 
+        private ServicesHotelBeachAPI servicesAPI;
+
         public PaquetesController()
         {
             hotelBeachAPI = new HotelBeachAPI();
 
             client = hotelBeachAPI.Inicial();
+
+            servicesAPI = new ServicesHotelBeachAPI();
         }
 
         // GET: Paquetes
@@ -69,8 +73,12 @@ namespace APP_HotelBeachSA.Controllers
         public async Task<IActionResult> Create([Bind] Paquete paquete)
         {
             paquete.Id = 0;
-            paquete.Id_Usuario = "208140785";
             paquete.Fecha_Registro = DateTime.Now;
+
+            var email = HttpContext.Session.GetString("email");
+            var usuario = servicesAPI.getUsuarioPorEmail(email);
+
+            paquete.Id_Usuario = usuario.Result.Cedula;
 
             var agregar = client.PostAsJsonAsync<Paquete>("/api/Paquetes/Crear", paquete);
 
