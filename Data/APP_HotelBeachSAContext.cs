@@ -21,6 +21,7 @@ namespace APP_HotelBeachSA.Data
         public DbSet<APP_HotelBeachSA.Models.Cheque> Cheque { get; set; } = default!;
         public DbSet<APP_HotelBeachSA.Models.Reservacion> Reservacion { get; set; } = default!;
         public DbSet<APP_HotelBeachSA.Model.Usuario> Usuario { get; set; } = default!;
+        public DbSet<APP_HotelBeachSA.Models.Cliente> Cliente { get; set; } = default!;
 
     }
 }
