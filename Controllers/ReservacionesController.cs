@@ -269,8 +269,7 @@ namespace APP_HotelBeachSA.Controllers
             superReservacion.Reservacion.Noches = cantidadNoches;
 
 
-            //Esperamos a que se ejecute el metodo para calcular la cantidad de noches
-            await CalcularDescuento(cantidadNoches);
+            
 
 
             //Esperamos a que se ejecute el método para el cálculo de los montos de la reservación
@@ -330,72 +329,48 @@ namespace APP_HotelBeachSA.Controllers
 
             if (cantidadNoches >= 3 && cantidadNoches <= 6)
             {
-                /// total = (noches * precioPaquete) / descuento
-                HttpResponseMessage respuestaDescuento = await httpClient.GetAsync($"api/Descuentos/Consultar?id={1}");
-                if (respuestaDescuento.IsSuccessStatusCode)
-                {
-                    var descuento = respuestaDescuento.Content.ReadAsStringAsync().Result;
-
-                    //Se convierte el JSON en un Object
-                    superReservacion.Discount = JsonConvert.DeserializeObject<Discount>(descuento);
-                    return true;
-                }//
-
+                superReservacion.Discount = await GetDiscount(1);
+                return true;
+                
             }
             else if (cantidadNoches >= 7 && cantidadNoches <= 9)
             {
-                HttpResponseMessage respuestaDescuento = await httpClient.GetAsync($"api/Descuentos/Consultar?id={2}");
-                if (respuestaDescuento.IsSuccessStatusCode)
-                {
-                    var descuento = respuestaDescuento.Content.ReadAsStringAsync().Result;
-
-                    //Se convierte el JSON en un Object
-                    superReservacion.Discount = JsonConvert.DeserializeObject<Discount>(descuento);
-                    return true;
-                }//
+                superReservacion.Discount = await GetDiscount(2);
+                return true;
             }
             else if (cantidadNoches >= 10 && cantidadNoches <= 12)
             {
-                ///
-                HttpResponseMessage respuestaDescuento = await httpClient.GetAsync($"api/Descuentos/Consultar?id={3}");
-                if (respuestaDescuento.IsSuccessStatusCode)
-                {
-                    var descuento = respuestaDescuento.Content.ReadAsStringAsync().Result;
-
-                    //Se convierte el JSON en un Object
-                    superReservacion.Discount = JsonConvert.DeserializeObject<Discount>(descuento);
-                    return true;
-                }//
+                superReservacion.Discount = await GetDiscount(3);
+                return true;
             }
             else if (cantidadNoches >= 13)
             {
-                ///
-                HttpResponseMessage respuestaDescuento = await httpClient.GetAsync($"api/Descuentos/Consultar?id={4}");
-                if (respuestaDescuento.IsSuccessStatusCode)
-                {
-                    var descuento = respuestaDescuento.Content.ReadAsStringAsync().Result;
-
-                    //Se convierte el JSON en un Object
-                    superReservacion.Discount = JsonConvert.DeserializeObject<Discount>(descuento);
-                    return true;
-                }//
+                superReservacion.Discount = await GetDiscount(4);
+                return true;
             }
             else
             {
-                /// total = noche * paquetes
-                HttpResponseMessage respuestaDescuento = await httpClient.GetAsync($"api/Descuentos/Consultar?id={5}");
-                if (respuestaDescuento.IsSuccessStatusCode)
-                {
-                    var descuento = respuestaDescuento.Content.ReadAsStringAsync().Result;
-
-                    //Se convierte el JSON en un Object
-                    superReservacion.Discount = JsonConvert.DeserializeObject<Discount>(descuento);
-                    return true;
-                }//
+                superReservacion.Discount = await GetDiscount(5);
+                return true;
             }
-
-            return false;
+            
         }//CalcularDescuento
+
+
+        private async Task<Discount> GetDiscount(int id)
+        {
+            /// total = (noches * precioPaquete) / descuento
+            HttpResponseMessage respuestaDescuento = await httpClient.GetAsync($"api/Descuentos/Consultar?id={id}");
+            if (respuestaDescuento.IsSuccessStatusCode)
+            {
+                var descuento = respuestaDescuento.Content.ReadAsStringAsync().Result;
+
+                //Se convierte el JSON en un Object
+                superReservacion.Discount = JsonConvert.DeserializeObject<Discount>(descuento);
+                return superReservacion.Discount;
+            }//
+            return null;
+        }
 
         /// <summary>
         /// Método para Calcular el Monto Final de la Reservacion
@@ -407,6 +382,35 @@ namespace APP_HotelBeachSA.Controllers
             try
             {
                 ///Cálculo total de Reservaciones
+                /////Datos sobre el pago
+                superReservacion.Pago.Fecha_Registro = DateTime.Now;
+                switch (superReservacion.Pago.Tipo_Pago)
+                {
+                    //Cash
+                    case 'K':
+                        Random rnd = new Random();
+                        int numeroAleatorio = rnd.Next(10000000, 99999999);
+
+                        //Esperamos a que se ejecute el metodo para calcular la cantidad de noches
+                        await CalcularDescuento(superReservacion.Reservacion.Noches);
+
+                        superReservacion.Pago.Numero_Pago = numeroAleatorio;
+                        superReservacion.TipoPago = "Cash";
+                        break;
+                    //Card
+                    case 'T':
+                        superReservacion.Discount = await GetDiscount(5);
+                        superReservacion.Pago.Numero_Pago = superReservacion.CardNumber;
+                        superReservacion.TipoPago = "Card";
+                        break;
+                    //Check
+                    case 'C':
+                        superReservacion.Discount = await GetDiscount(5);
+                        superReservacion.Pago.Numero_Pago = superReservacion.Cheque.Id;
+                        superReservacion.TipoPago = "Check";
+                        break;
+                }//Fin del switch
+
 
                 //Cálculo de Costo por persona
                 superReservacion.CostoPersona = Decimal.Multiply(superReservacion.Reservacion.Noches, superReservacion.Paquete.Costo_Persona);
@@ -432,30 +436,6 @@ namespace APP_HotelBeachSA.Controllers
                 //Monto del adelanto
                 superReservacion.Adelanto = Decimal.Multiply(superReservacion.Reservacion.Total, porcentajeAdelanto);
 
-
-                //Datos sobre el pago
-                superReservacion.Pago.Fecha_Registro = DateTime.Now;
-                switch (superReservacion.Pago.Tipo_Pago)
-                {
-                    //Cash
-                    case 'K':
-                        Random rnd = new Random();
-                        int numeroAleatorio = rnd.Next(10000000, 99999999);
-
-                        superReservacion.Pago.Numero_Pago = numeroAleatorio;
-                        superReservacion.TipoPago = "Cash";
-                        break;
-                    //Card
-                    case 'T':
-                        superReservacion.Pago.Numero_Pago = superReservacion.CardNumber;
-                        superReservacion.TipoPago = "Card";
-                        break;
-                    //Check
-                    case 'C':
-                        superReservacion.Cheque.Id = superReservacion.Pago.Numero_Pago;
-                        superReservacion.TipoPago = "Check";
-                        break;
-                }//Fin del switch
 
 
                 return true;
@@ -495,6 +475,7 @@ namespace APP_HotelBeachSA.Controllers
             }
             else
             {
+                superReservacion.Cheque = null;
                 return true;
             }
 

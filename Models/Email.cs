@@ -14,8 +14,9 @@ namespace APP_HotelBeachSA.Models
         {
             try
             {
+                var htmlContent = new StringBuilder();
 
-                var htmlContent = $@"
+                htmlContent.Append($@"
                 
                 <html>
                 <head>
@@ -153,23 +154,56 @@ namespace APP_HotelBeachSA.Models
                                     <td>{superReservacion.Adelanto.ToString("0.00")}</td>
                                 </tr>
                             </table>
-                        </div>
+                        </div>");
+
+                        if (superReservacion.Cheque != null)
+                        {
+                            htmlContent.Append(@$"
+                                    <div>
+                                        <h5>Information about the Check</h5>
+                                        <table>
+                                            <tr>
+                                                <th>Check Number</th>
+                                                <td>{superReservacion.Pago.Numero_Pago}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Bank Name</th>
+                                                <td>{superReservacion.Cheque.Nombre_Banco}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Quantity<th>
+                                                <td>{superReservacion.Cheque.Cantidad}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Currency<th>
+                                                <td>{superReservacion.Cheque.Moneda}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                            ");
+                        }
 
 
-                        <div>    
+                htmlContent.Append(@"
+                         <div>    
                            <h5>We are waiting for you</h5>
                            <p>Feel free to contact us</p>
                            <p>Email: beach.hotel.App@outlook.com</p>
-                        </div>        
+                         </div>        
 
                     </div>
                 </body>
-                </html>";
+                </html>");
 
 
+
+
+
+                // Convertir StringBuilder a string para su uso en otros lugares
+                string htmlString = htmlContent.ToString();
 
                 // Generar PDF
-                var pdfPath = GenerarPDF(htmlContent);
+                var pdfPath = GenerarPDF(htmlString);
 
                 // Configuración del correo
                 MailMessage mail = new MailMessage
