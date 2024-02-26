@@ -9,7 +9,13 @@
     <div class="container">
         <main role="main" class="pb-3">
             <h1 class="mt-4">Reservation</h1>
+            @if (TempData["MensajeReserva"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Mensaje! </strong> @TempData["MensajeReserva"].
+                </div>
 
+            }
             <!-- Container for Reservation Steps -->
             <div class="mt-4 col-md-7">
                 <div class="d-flex">
@@ -53,7 +59,7 @@
                 <div class="mt-4 d-block bg-grey col-md-7 p-5 rounded">
 
 
-                    <form asp-action="CrearReservacion">
+                    <form asp-action="CrearReservacion" onsubmit="return validateReservationForm()">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <!-- Container for Dates and Guests -->
@@ -81,7 +87,7 @@
                                     class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
                                 Next
                             </button>
-                            <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
+                            <a asp-controller="Reservaciones" asp-action="BuscarCliente" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
                         </div>
 
 
@@ -93,6 +99,7 @@
                                     <label asp-for="Pago.Tipo_Pago" class="control-label pb-2">Type of Payment</label>
                                     <select asp-for="Pago.Tipo_Pago" id="type-payment" onchange="showCheckInfo()" class="form-select"
                                             aria-label="Type of Payment">
+                                        <option value="N">Type of Payment</option>
                                         <option value="K">Cash</option>
                                         <option value="T">Card</option>
                                         <option value="C">Check</option>
@@ -135,7 +142,7 @@
                                     class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
                                 Next
                             </button>
-                            <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
+                            <button onclick="changeToDates()" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
                         </div>
 
                     </form>
@@ -167,7 +174,7 @@
                             <div class="col">
                                 <p class="small simple-text fw-light">Last Name</p>
                                 <p class="fw-bold">@Model.Cliente.Primer_Apellido @Model.Cliente.Segundo_Apellido</p>
-                            </div>                                                       
+                            </div>
                         </div>
 
                         <div class="">
@@ -176,7 +183,7 @@
                             <p class="small fw-bold m-0">Email: <span class="fw-normal">@Model.Cliente.Email</span></p>
                             <p class="small fw-bold ">Address: <span class="fw-normal">@Model.Cliente.Direccion</span></p>
                         </div>
-                    </div>                 
+                    </div>
 
                 </div>
             </div>
@@ -188,5 +195,54 @@
 
 </body>
 
+
+<script>
+    function validateReservationForm() {
+        // Validar número de huéspedes
+        var guests = document.getElementById("Reservacion_Huespedes").value;
+        if (guests <= 0) {
+            alert("Please enter a valid number of guests.");
+            return false;
+        }
+
+        // Validar tipo de pago
+        var paymentType = document.getElementById("type-payment").value;
+        if (paymentType === "N") {
+            alert("Please enter a valid type of payment");
+            return false;
+        }
+
+        // Validar tipo de pago
+        var paymentType = document.getElementById("type-payment").value;
+        if (paymentType === "C" && !validateCheckPayment()) {
+            return false;
+        }
+
+        // Validar tipo de pago
+        var cardNumber = document.getElementById("CardNumber").value;
+        var paymentType = document.getElementById("type-payment").value;
+        if (paymentType === "T" && cardNumber <= 0) {
+            alert("Please fill out the card number");
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateCheckPayment() {
+        // Validar campos del cheque si el tipo de pago es cheque
+        var checkNumber = document.getElementById("Cheque_Id").value;
+        var currency = document.getElementById("Cheque_Moneda").value;
+        var amount = document.getElementById("Cheque_Cantidad").value;
+        var bankName = document.getElementById("Cheque_Nombre_Banco").value;
+
+        if (!checkNumber || !currency || !amount || !bankName) {
+            alert("Please fill out all fields for check payment.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
 
 

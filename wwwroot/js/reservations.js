@@ -10,17 +10,16 @@ function changeToPayment() {
     document.getElementById('payment-circle').classList.toggle('circle-outline');
 }
 
-function changeToConfirmation() {
+function changeToDates() {
     event.preventDefault();
+    document.getElementById('dates').classList.toggle('d-none');
     document.getElementById('payment').classList.toggle('d-none');
-    document.getElementById('confirmation').classList.toggle('d-none');
-    document.getElementById('summary').style.display = 'none';
 
     document.getElementById('payment-circle').classList.toggle('circle');
     document.getElementById('payment-circle').classList.toggle('circle-outline');
 
-    document.getElementById('confirmation-circle').classList.toggle('circle');
-    document.getElementById('confirmation-circle').classList.toggle('circle-outline');
+    document.getElementById('dates-circle').classList.toggle('circle');
+    document.getElementById('dates-circle').classList.toggle('circle-outline');
 }
 
 function showCheckInfo() {

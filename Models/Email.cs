@@ -104,12 +104,12 @@ namespace APP_HotelBeachSA.Models
                                     <td>{superReservacion.Paquete.Costo_Persona}</td>
                                 </tr>
                                 <tr>
-                                    <th>Advance %</th>
-                                    <td>{superReservacion.Paquete.Adelanto}</td>
+                                    <th>Advance</th>
+                                    <td>{superReservacion.Paquete.Adelanto}%</td>
                                 </tr>
                                 <tr>
                                     <th>Terms </th>
-                                    <td>{superReservacion.Paquete.Terminos_Pago}</td>
+                                    <td>{superReservacion.Paquete.Terminos_Pago} months</td>
                                 </tr>
                             </table>
                         </div>

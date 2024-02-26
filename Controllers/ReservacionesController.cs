@@ -211,27 +211,8 @@ namespace APP_HotelBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CrearReservacion([Bind] SuperReservacion superReservacion)
         {
-            // Almacenar el objeto superReservacion en TempData
-            TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
 
-            //Redirigir a la confirmacion
-            return RedirectToAction("Confirmacion", "Reservaciones");
-        }//CrearReservacion
-
-
-        /// <summary>
-        /// Método para llenar los datos restantes de la superReservación
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> Confirmacion()
-        {
-            // Recuperar el objeto superReservacion desde TempData
-            string superReservacionJson = TempData["SuperReservacion"] as string;
-
-            //Se asigna el objeto
-            superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
-
+           
 
             ///Recuperar el id del paquete para almacenar la info del Paquete
             HttpResponseMessage response = await httpClient.GetAsync($"api/Paquetes/Consultar?id={idPaquete}");
@@ -254,22 +235,52 @@ namespace APP_HotelBeachSA.Controllers
             }
 
 
-            //Calculo de Noches
+            //Validación de fechas
+            // Verificar si la fecha de check-in es menor o igual a la fecha actual
+            if (superReservacion.Reservacion.Entrada.Date <= DateTime.Now.Date)
+            {
+                TempData["MensajeReserva"] = "La fecha de check-in debe ser posterior a la fecha actual.";
+                TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+                return View(superReservacion);
+            }
+
+            // Verificar si la fecha de salida es menor que la fecha de entrada
+            if (superReservacion.Reservacion.Salida <= superReservacion.Reservacion.Entrada)
+            {
+                TempData["MensajeReserva"] = "La fecha de salida debe ser posterior a la fecha de check-in.";
+                TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+                return View(superReservacion);
+            }
+                      
+
             // Calcula la diferencia de días entre las fechas de entrada y salida
             TimeSpan diferencia = superReservacion.Reservacion.Salida.Subtract(superReservacion.Reservacion.Entrada);
-
             // Obtiene la cantidad de noches redondeando hacia arriba
-            int cantidadNoches = (int)Math.Ceiling(diferencia.TotalDays);
-            if (cantidadNoches <= 0)
-            {
-                TempData["Mensaje"] = "Fallo con la fecha definida. Por favor intente de nuevo";
-                superReservacion = null;
-                return RedirectToAction("RegistrarDB", "Reservaciones");
-            }
+            int cantidadNoches = (int)Math.Ceiling(diferencia.TotalDays);            
             superReservacion.Reservacion.Noches = cantidadNoches;
 
 
-            
+            // Almacenar el objeto superReservacion en TempData
+            TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+
+            //Redirigir a la confirmacion
+            return RedirectToAction("Confirmacion", "Reservaciones");
+        }//CrearReservacion
+
+
+        /// <summary>
+        /// Método para llenar los datos restantes de la superReservación
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Confirmacion()
+        {
+            // Recuperar el objeto superReservacion desde TempData
+            string superReservacionJson = TempData["SuperReservacion"] as string;
+
+            //Se asigna el objeto
+            superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
+
 
 
             //Esperamos a que se ejecute el método para el cálculo de los montos de la reservación
