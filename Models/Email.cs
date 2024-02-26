@@ -40,6 +40,32 @@ namespace APP_HotelBeachSA.Models
                         <h4>Thank you for selecting us</h4>
 
                         <div>
+                            <h5>Information about the Client</h5>
+                            <table>
+                                <tr>
+                                    <th>Client</th>
+                                    <td>{superReservacion.Cliente.Nombre} {superReservacion.Cliente.Primer_Apellido} {superReservacion.Cliente.Segundo_Apellido}</td>
+                                </tr>
+                                <tr>
+                                    <th>Identification</th>
+                                    <td>{superReservacion.Cliente.Cedula}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone</th>
+                                    <td>{superReservacion.Cliente.Telefono}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{superReservacion.Cliente.Email}</td>
+                                </tr>
+                                <tr>
+                                    <th>Direction</th>
+                                    <td>{superReservacion.Cliente.Direccion}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div>
                             <h5>Information about the Reservation</h5>
                             <table>
                                 <tr>
