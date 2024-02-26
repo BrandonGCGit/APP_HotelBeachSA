@@ -1,6 +1,6 @@
 ﻿namespace APP_HotelBeachSA.Models
 {
-    public class TipoCambioAPI
+    public class GometaAPI
     {
         public HttpClient Inicial()
         {

@@ -14,7 +14,7 @@
 
                 @if (TempData["Mensaje"] != null)
                 {
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
                         <strong>Mensaje! </strong> @TempData["Mensaje"].                       
                     </div>
                     <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Go Back</a>
