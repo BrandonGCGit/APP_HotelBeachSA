@@ -17,40 +17,118 @@ namespace APP_HotelBeachSA.Models
 
                 var htmlContent = $@"
                 
+                <html>
+                <head>
+                    <style>
+                        table {{
+                            border-collapse: collapse;
+                            width: 100%;
+                        }}
+                        th, td {{
+                            border: 1px solid #dddddd;
+                            text-align: left;
+                            padding: 8px;
+                        }}
+                        th {{
+                            background-color: #f2f2f2;
+                        }}
+                    </style>
+                </head>
                 <body>
                     <div class=""container"">
                         <h1>Reservation</h1>
                         <h4>Thank you for selecting us</h4>
 
-                        <div>    
-                           <h5>Information about the Reservation</h5>
-                           <p>Check-in: {superReservacion.Reservacion.Entrada}</p>
-                           <p>Check-out: {superReservacion.Reservacion.Salida}</p>
-                           <p>Number of guests: {superReservacion.Reservacion.Huespedes}</p>
-                           <p>Nights: {superReservacion.Reservacion.Noches}</p>
-                           <p>Total: {superReservacion.Reservacion.Total}</p>
+                        <div>
+                            <h5>Information about the Reservation</h5>
+                            <table>
+                                <tr>
+                                    <th>Check-in</th>
+                                    <td>{superReservacion.Reservacion.Entrada}</td>
+                                </tr>
+                                <tr>
+                                    <th>Check-out</th>
+                                    <td>{superReservacion.Reservacion.Salida}</td>
+                                </tr>
+                                <tr>
+                                    <th>Number of guests</th>
+                                    <td>{superReservacion.Reservacion.Huespedes}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nights</th>
+                                    <td>{superReservacion.Reservacion.Noches}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total</th>
+                                    <td>{superReservacion.Reservacion.Total}</td>
+                                </tr>
+                            </table>
                         </div>
 
-                        <div>    
-                           <h5>Information about the Package</h5>
-                           <p>Package: {superReservacion.Paquete.Nombre}</p>
-                           <p>Cost per person: {superReservacion.Paquete.Costo_Persona}</p>
-                           <p>Advance %: {superReservacion.Paquete.Adelanto}</p>
-                           <p>Terms: {superReservacion.Paquete.Terminos_Pago}</p>
+                        <div>
+                            <h5>Information about the Package</h5>
+                            <table>
+                                <tr>
+                                    <th>Package</th>
+                                    <td>{superReservacion.Paquete.Nombre}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cost per person</th>
+                                    <td>{superReservacion.Paquete.Costo_Persona}</td>
+                                </tr>
+                                <tr>
+                                    <th>Advance %</th>
+                                    <td>{superReservacion.Paquete.Adelanto}</td>
+                                </tr>
+                                <tr>
+                                    <th>Terms </th>
+                                    <td>{superReservacion.Paquete.Terminos_Pago}</td>
+                                </tr>
+                            </table>
                         </div>
 
-                         <div>    
-                           <h5>Information about the Payment</h5>
-                           <p>Type of Payment: {superReservacion.TipoPago}</p>
-                           <p>Number of payment: {superReservacion.Pago.Numero_Pago}</p>
-                           <p>Cost per person: {superReservacion.CostoPersona}</p>
-                           <p>Total Cost: {superReservacion.CostoTotal}</p>
-                           <p>Iva: {superReservacion.Iva}</p>
-                           <p>Discount: {superReservacion.MontoDescuento}</p>
-                           <p>Total Price: {superReservacion.Reservacion.Total}</p>
-                           <p>Colones: {superReservacion.MontoColones}</p>
-                           <p>Advance: {superReservacion.Adelanto}</p>
+                       <div>
+                            <h5>Information about the Payment</h5>
+                            <table>
+                                <tr>
+                                    <th>Type of Payment</th>
+                                    <td>{superReservacion.TipoPago}</td>
+                                </tr>
+                                <tr>
+                                    <th>Number of payment</th>
+                                    <td>{superReservacion.Pago.Numero_Pago}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cost per person </th>
+                                    <td>{superReservacion.CostoPersona}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Cost  </th>
+                                    <td>{superReservacion.CostoTotal}</td>
+                                </tr>
+                                <tr>
+                                    <th>Iva  </th>
+                                    <td>{superReservacion.Iva}</td>
+                                </tr>
+                                <tr>
+                                    <th>Discount   </th>
+                                    <td>{superReservacion.MontoDescuento}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Price    </th>
+                                    <td>{superReservacion.Reservacion.Total}</td>
+                                </tr>
+                                <tr>
+                                    <th>Colones   </th>
+                                    <td>{superReservacion.MontoColones}</td>
+                                </tr>
+                                <tr>
+                                    <th>Advance    </th>
+                                    <td>{superReservacion.Adelanto}</td>
+                                </tr>
+                            </table>
                         </div>
+
 
                         <div>    
                            <h5>We are waiting for you</h5>

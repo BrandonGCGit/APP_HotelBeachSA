@@ -133,10 +133,10 @@ namespace APP_HotelBeachSA.Controllers
         [HttpGet]
         public async Task<IActionResult> RegistrarDB()
         {
-            if (superReservacion != null)
-            {
                 string superReservacionJson = TempData["SuperReservacion"] as string;
                 superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
+            if (superReservacion != null)
+            {
 
 
                 if (await RegistrarPago())
