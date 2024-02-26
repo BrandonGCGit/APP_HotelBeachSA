@@ -1,0 +1,136 @@
+﻿@model APP_HotelBeachSA.Models.Cliente
+
+@{
+    ViewData["Title"] = "RegistrarCliente";
+    Layout = "~/Views/Shared/_ReservacionesLayout.cshtml";
+}
+
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <h1 class="mt-4">Reservation</h1>
+            @if (TempData["MensajeCliente"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Mensaje! </strong> @TempData["MensajeCliente"].
+                </div>
+
+            }
+            <!-- Container for Reservation Steps -->
+            <div class="mt-4 col-md-7">
+                <div class="d-flex">
+
+                    <div id="information-circle"
+                         class="circle d-flex justify-content-center align-items-center me-3">
+                        <p class="d-inline align-self-center fw-bold m-0">1</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <h6 class="lead d-inline align-middle fw-bold m-0">Information</h6>
+                    </div>
+
+                    <p class="d-inline align-self-center horizontal-line mx-4"></p>
+
+                    <div id="dates-circle"
+                         class="circle-outline d-flex justify-content-center align-items-center me-3">
+                        <p class="d-inline align-self-center fw-bold m-0">2</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <h6 class="lead d-inline align-middle fw-bold m-0">Dates</h6>
+                    </div>
+
+                    <p class="d-inline align-self-center horizontal-line mx-4"></p>
+
+                    <div id="payment-circle"
+                         class="circle-outline d-flex justify-content-center align-items-center me-3">
+                        <p class="d-inline align-self-center fw-bold m-0">3</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <h6 class="lead d-inline align-middle fw-bold m-0">Payment</h6>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="row gap-4">
+
+                <div class="mt-4 d-block bg-grey col-md-7 p-5 rounded">
+
+
+                    <form asp-action="RegistrarCliente">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <!-- Container for Client Info -->
+                        <div id="client">
+                            <h3 class="fw-bold">Please check out the following information</h3>
+
+                            <div class="mb-3 col-5">
+                                <label asp-for="Cedula" class="control-label pb-2">Cedula</label>
+                                <input asp-for="Cedula" class="form-control" readonly>
+                                <span asp-validation-for="Cedula" class="text-danger"></span>
+                            </div>
+                            <div class="d-flex gap-4 mt-4">
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Tipo_Cedula" class="control-label pb-2">Tipo de Cédula</label>
+                                    <input asp-for="Tipo_Cedula" class="form-control">
+                                    <span asp-validation-for="Tipo_Cedula" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Nombre" class="control-label pb-2">Nombre</label>
+                                    <input asp-for="Nombre" class="form-control">
+                                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-4 mt-4">
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Primer_Apellido" class="control-label pb-2">Primer Apellido</label>
+                                    <input asp-for="Primer_Apellido" class="form-control">
+                                    <span asp-validation-for="Primer_Apellido" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Segundo_Apellido" class="control-label pb-2">Segundo Apellido</label>
+                                    <input asp-for="Segundo_Apellido" class="form-control">
+                                    <span asp-validation-for="Segundo_Apellido" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-4 mt-4">
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Email" class="control-label pb-2">Email</label>
+                                    <input asp-for="Email" class="form-control">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 col-5">
+                                    <label asp-for="Telefono" class="control-label pb-2">Teléfono</label>
+                                    <input asp-for="Telefono" class="form-control">
+                                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-5">
+                                <label asp-for="Direccion" class="control-label pb-2">Dirección</label>
+                                <input asp-for="Direccion" class="form-control">
+                                <span asp-validation-for="Direccion" class="text-danger"></span>
+                            </div>
+
+
+                            <input type="submit" value="Create"
+                                    class="btn fw-bold btn-primary-org mt-4 px-4 me-2"/>
+                            
+                            <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+
+
+</body>
+

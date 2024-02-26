@@ -15,19 +15,23 @@ namespace APP_HotelBeachSA.Controllers
     {
         private HotelBeachAPI hotelBeachAPI;
 
-        private TipoCambioAPI tipoCambioAPI;
+        private GometaAPI gometaAPI;
 
         //Variable para manejar la referencia del object  HttpcClient
         private HttpClient httpClient;
 
-        private HttpClient clientTipoCambio;
+        private HttpClient clientGometa;
 
         //variable para almacenar el valor del tipo de cambio
         public static TipoCambio tipoCambio;
 
-        private static int idPaquete;
+        //variable para almacenar los datos por cedula
+        public ClienteGometa clienteGometa;
 
-        private SuperReservacion superReservacion = null;
+        private static int idPaquete;
+        private static string idCliente;
+
+        private SuperReservacion superReservacion = new SuperReservacion();
 
         public ReservacionesController()
         {
@@ -35,14 +39,16 @@ namespace APP_HotelBeachSA.Controllers
 
             httpClient = hotelBeachAPI.Inicial();
 
-            tipoCambioAPI = new TipoCambioAPI();
+            gometaAPI = new GometaAPI();
 
-            clientTipoCambio = tipoCambioAPI.Inicial();
+            clientGometa = gometaAPI.Inicial();            
+        }//constructor
 
-            //Se llama al método para extraer tipo de cambio
-            extraerTipoCambio();
-        }//constructo
 
+        /// <summary>
+        /// Método para mostrar los paquetes registrados
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             //lista de libros
@@ -63,37 +69,171 @@ namespace APP_HotelBeachSA.Controllers
             return View(listado);
         }//Index
 
-        [HttpPost]
-        public IActionResult Index([Bind] Paquete paquete)
-        {
-            return View(paquete);
-        }//Index
-
         [HttpGet]
-        public IActionResult CrearReservacion(int id)
+        public async Task<IActionResult> BuscarCliente(int id)
         {
             idPaquete = id;
             return View();
+        }//BuscarCliente
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BuscarCliente(string cedula)
+        {
+            Cliente pCliente = new Cliente();
+            HttpResponseMessage respuesta = await httpClient.GetAsync($"/api/Clientes/Consultar?cedula={cedula}");
+            
+            if (respuesta.IsSuccessStatusCode)
+            {
+                var resultado = respuesta.Content.ReadAsStringAsync().Result;
+
+                pCliente = JsonConvert.DeserializeObject<Cliente>(resultado);
+            }
+            else
+            {
+                pCliente = null;
+            }
+
+
+            //Si el cliente ya se ha registrado
+            if(pCliente != null)
+            {
+                idCliente = cedula;
+                superReservacion.Cliente = pCliente;
+                TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+                return RedirectToAction("CrearReservacion", "Reservaciones");
+            }
+            else
+            {
+                //Extraer los datos segun la cedula
+                if(!extraerDatosCedula(cedula).IsFaulted)
+                {
+                    //Crear objeto cliente con la informacion
+                    Cliente nuevoCliente = new Cliente();
+                    nuevoCliente.Cedula = clienteGometa.cedula;
+                    nuevoCliente.Tipo_Cedula = clienteGometa.guess_type;
+                    nuevoCliente.Nombre = clienteGometa.firstname;
+                    nuevoCliente.Primer_Apellido = clienteGometa.lastname1;
+                    nuevoCliente.Segundo_Apellido = clienteGometa.lastname2;
+
+                    //Almacenar superReservacion con los datos
+                    superReservacion.Cliente = nuevoCliente;
+                    TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+
+                    //Redirigir a RegistrarCliente
+                    return RedirectToAction("RegistrarCliente", "Reservaciones");
+                }
+                else
+                {
+                    TempData["MensajeCedula"] = "No se logró encontrar la cédula";
+                    return View();
+                }         
+            }           
+            //return View(pCliente);
+        }//BuscarCliente
+
+        /// <summary>
+        /// Método para mostrar el form de RegistrarCliente
+        /// </summary>
+        /// <param name="pCliente"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> RegistrarCliente()
+        {
+            // Recuperar el objeto superReservacion desde TempData
+            string superReservacionJson = TempData["SuperReservacion"] as string;
+
+            //Se asigna el objeto
+            superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
+
+            return View(superReservacion.Cliente);
+        }//RegistrarCliente
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegistrarCliente([Bind]Cliente pCliente)
+        {
+            pCliente.Fecha_Registro = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+
+                HttpResponseMessage response = await httpClient.PostAsJsonAsync<Cliente>("/api/Clientes/Crear", pCliente);
+
+                //Reservacion reservacion = new Reservacion();
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultados = response.Content.ReadAsStringAsync().Result;
+
+                    superReservacion.Cliente = JsonConvert.DeserializeObject<Cliente>(resultados);
+                    idCliente = superReservacion.Cliente.Cedula;
+                    TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+                    return RedirectToAction("CrearReservacion", "Reservaciones");
+                }
+                else
+                {
+                    TempData["MensajeCliente"] = "No se logro registrar el cliente...";
+                    return View(pCliente);
+                }
+            }
+            else
+            {
+                return View(pCliente);
+            }
+
+            
+        }//RegistrarCliente
+
+        /// <summary>
+        /// Método para mostrar las vista de las fechas y los métodos de pago
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult CrearReservacion()
+        {
+            // Recuperar el objeto superReservacion desde TempData
+            string superReservacionJson = TempData["SuperReservacion"] as string;
+
+            //Se asigna el objeto
+            superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
+            return View(superReservacion);
         }//CrearReservacion
 
+
+        
+
+        /// <summary>
+        /// Método para enviar guardar temporalmente los datos de la superReservación
+        /// </summary>
+        /// <param name="superReservacion"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CrearReservacion([Bind] SuperReservacion superReservacion)
         {
             // Almacenar el objeto superReservacion en TempData
             TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+
+            //Redirigir a la confirmacion
             return RedirectToAction("Confirmacion", "Reservaciones");
         }//CrearReservacion
 
+
+        /// <summary>
+        /// Método para llenar los datos restantes de la superReservación
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Confirmacion()
         {
             // Recuperar el objeto superReservacion desde TempData
             string superReservacionJson = TempData["SuperReservacion"] as string;
+
+            //Se asigna el objeto
             superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
 
 
-            ///Optimizar
+            ///Recuperar el id del paquete para almacenar la info del Paquete
             HttpResponseMessage response = await httpClient.GetAsync($"api/Paquetes/Consultar?id={idPaquete}");
             if (response.IsSuccessStatusCode)
             {
@@ -103,10 +243,20 @@ namespace APP_HotelBeachSA.Controllers
                 superReservacion.Paquete = JsonConvert.DeserializeObject<Paquete>(paquete);
             }
 
+            //Recuperar el id del Cliente para almacenar en superReservacion
+            HttpResponseMessage responseCliente = await httpClient.GetAsync($"/api/Clientes/Consultar?cedula={idCliente}");
+            if (responseCliente.IsSuccessStatusCode)
+            {
+                var cliente = responseCliente.Content.ReadAsStringAsync().Result;
 
-            //Calculo de Noches
-            // Calcula la diferencia de días entre las fechas de entrada y salida
-            TimeSpan diferencia = superReservacion.Reservacion.Salida.Subtract(superReservacion.Reservacion.Entrada);
+                //Se convierte el JSON en un Object
+                superReservacion.Cliente = JsonConvert.DeserializeObject<Cliente>(cliente);
+            }
+
+
+                //Calculo de Noches
+                // Calcula la diferencia de días entre las fechas de entrada y salida
+                TimeSpan diferencia = superReservacion.Reservacion.Salida.Subtract(superReservacion.Reservacion.Entrada);
 
             // Obtiene la cantidad de noches redondeando hacia arriba
             int cantidadNoches = (int)Math.Ceiling(diferencia.TotalDays);
@@ -119,28 +269,39 @@ namespace APP_HotelBeachSA.Controllers
             superReservacion.Reservacion.Noches = cantidadNoches;
 
 
+            //Esperamos a que se ejecute el metodo para calcular la cantidad de noches
             await CalcularDescuento(cantidadNoches);
 
+
+            //Esperamos a que se ejecute el método para el cálculo de los montos de la reservación
             await CalcularMontoReservacion();
 
-
+            //Almacenamos de manera temporal el Modelo SuperReservacion
             TempData["SuperReservacion"] = JsonConvert.SerializeObject(superReservacion);
+
+            //Se devuelve la vista con los datos
             return View(superReservacion);
         }//Confirmacion
 
 
-
+        /// <summary>
+        /// Método para registrar los modelos en la base de datos
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> RegistrarDB()
         {
+            //Se recupera el objeto almacenado temporalmente
+            string superReservacionJson = TempData["SuperReservacion"] as string;
+            superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
+
+            //si es diferente de null
             if (superReservacion != null)
             {
-                string superReservacionJson = TempData["SuperReservacion"] as string;
-                superReservacion = JsonConvert.DeserializeObject<SuperReservacion>(superReservacionJson);
-
-
+                //Esperamos a que registre los datos del pago
                 if (await RegistrarPago())
                 {
+                    //Retornamos una vista con mensaje
                     return View();
                 }
                 else
@@ -151,10 +312,11 @@ namespace APP_HotelBeachSA.Controllers
             }
             else
             {
+                TempData["Mensaje"] = "Fallo con el registro de la Reservación";
                 return View();
             }
 
-        }
+        }//RegistrarDB
 
 
         //------------------------METODOS AUXILIARES----------------------------
@@ -263,6 +425,8 @@ namespace APP_HotelBeachSA.Controllers
                 //Costo del Monto Total + IVA - Monto de Descuento
                 superReservacion.Reservacion.Total = (superReservacion.CostoTotal + superReservacion.Iva) - superReservacion.MontoDescuento;
 
+                //Se llama al método para extraer tipo de cambio
+                await extraerTipoCambio();
                 superReservacion.MontoColones = Decimal.Multiply(superReservacion.Reservacion.Total, tipoCambio.venta);
 
                 //Monto del adelanto
@@ -339,7 +503,7 @@ namespace APP_HotelBeachSA.Controllers
         {
             if (await RegistrarReservacion() > 0)
             {
-                superReservacion.Pago.Id_Cliente = "208140785";
+                superReservacion.Pago.Id_Cliente = superReservacion.Cliente.Cedula;
                 superReservacion.Pago.Id_Reservacion = superReservacion.Reservacion.Id;
                 HttpResponseMessage response = await httpClient.PostAsJsonAsync<Pago>("api/Pagos/Agregar", superReservacion.Pago);
 
@@ -398,14 +562,14 @@ namespace APP_HotelBeachSA.Controllers
         {
             if (superReservacion != null)
             {
-                superReservacion.Reservacion.Id_Cliente = "208140785";
+                superReservacion.Reservacion.Id_Cliente = superReservacion.Cliente.Cedula;
                 superReservacion.Reservacion.Id_Paquete = superReservacion.Paquete.Id;
                 superReservacion.Reservacion.Id_Descuento = superReservacion.Discount.Id;
                 superReservacion.Reservacion.Fecha_Registro = DateTime.Now;
 
                 HttpResponseMessage response = await httpClient.PostAsJsonAsync<Reservacion>("api/Reservaciones/Agregar", superReservacion.Reservacion);
 
-                Reservacion reservacion = new Reservacion();
+                //Reservacion reservacion = new Reservacion();
                 if (response.IsSuccessStatusCode)
                 {
                     var resultados = response.Content.ReadAsStringAsync().Result;
@@ -432,12 +596,12 @@ namespace APP_HotelBeachSA.Controllers
         /// Método para extraer el tipo de cambio
         /// </summary>
         [HttpGet]
-        private async void extraerTipoCambio()
+        private async Task<bool> extraerTipoCambio()
         {
             try
             {
                 //Se consume el método para la API
-                HttpResponseMessage response = await clientTipoCambio.GetAsync("tdc/tdc.json");
+                HttpResponseMessage response = await clientGometa.GetAsync("tdc/tdc.json");
 
                 //Se valida si todo fue correcto
                 if (response.IsSuccessStatusCode)
@@ -447,6 +611,44 @@ namespace APP_HotelBeachSA.Controllers
 
                     //Se convierte el JSON en un Objeto TipoCambio
                     tipoCambio = JsonConvert.DeserializeObject<TipoCambio>(result);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return false;
+        }//Extraertipocambio
+
+        /// <summary>
+        /// Método para extraer los datos del api de cedulas
+        /// </summary>
+        [HttpGet]
+        private async Task<bool> extraerDatosCedula(string cedula)
+        {
+            try
+            {
+                //Se consume el método para la API
+                HttpResponseMessage response = await clientGometa.GetAsync($"cedulas/{cedula}");
+
+                //Se valida si todo fue correcto
+                if (response.IsSuccessStatusCode)
+                {
+                    //Se realiza lectura de los datos en formato JSON
+                    var result = response.Content.ReadAsStringAsync().Result;
+
+                    // Convertir el JSON en un objeto anónimo para acceder a 'results'
+                    var jsonObject = JsonConvert.DeserializeAnonymousType(result, new { results = new ClienteGometa[] { } });
+
+
+                    //Se convierte el JSON en un Objeto TipoCambio
+                    clienteGometa = jsonObject.results[0];
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)

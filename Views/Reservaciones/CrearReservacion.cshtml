@@ -138,130 +138,46 @@
                             <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
                         </div>
 
-                        <!-- Container for Client Info -->
-                        @* <div id="client">
-                        <h3 class="fw-bold">Please fill out the information</h3>
-
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Cedula" class="control-label pb-2">Cédula</label>
-                        <input asp-for="Cliente.Cedula" class="form-control">
-                        <span asp-validation-for="Cliente.Cedula" class="text-danger"></span>
-                        </div>
-                        <div class="d-flex gap-4 mt-4">
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Tipo_Cedula" class="control-label pb-2">Tipo de Cédula</label>
-                        <input asp-for="Cliente.Tipo_Cedula" class="form-control">
-                        <span asp-validation-for="Cliente.Tipo_Cedula" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Nombre" class="control-label pb-2">Nombre</label>
-                        <input asp-for="Cliente.Nombre" class="form-control">
-                        <span asp-validation-for="Cliente.Nombre" class="text-danger"></span>
-                        </div>
-                        </div>
-
-                        <div class="d-flex gap-4 mt-4">
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Primer_Apellido" class="control-label pb-2">Primer Apellido</label>
-                        <input asp-for="Cliente.Primer_Apellido" class="form-control">
-                        <span asp-validation-for="Cliente.Primer_Apellido" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Segundo_Apellido" class="control-label pb-2">Segundo Apellido</label>
-                        <input asp-for="Cliente.Segundo_Apellido" class="form-control">
-                        <span asp-validation-for="Cliente.Segundo_Apellido" class="text-danger"></span>
-                        </div>
-                        </div>
-
-                        <div class="d-flex gap-4 mt-4">
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Email" class="control-label pb-2">Email</label>
-                        <input asp-for="Cliente.Email" class="form-control">
-                        <span asp-validation-for="Cliente.Email" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Telefono" class="control-label pb-2">Teléfono</label>
-                        <input asp-for="Cliente.Telefono" class="form-control">
-                        <span asp-validation-for="Cliente.Telefono" class="text-danger"></span>
-                        </div>
-                        </div>
-
-                        <div class="mb-3 col-5">
-                        <label asp-for="Cliente.Direccion" class="control-label pb-2">Dirección</label>
-                        <input asp-for="Cliente.Direccion" class="form-control">
-                        <span asp-validation-for="Cliente.Direccion" class="text-danger"></span>
-                        </div>
-
-
-                        <button onclick=""
-                        class="btn fw-bold btn-primary-org mt-4 px-4 me-2">
-                        Next
-                        </button>
-                        <button asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</button>
-                        </div> *@
-
-
                     </form>
                 </div>
 
                 <!-- Container for Reservation Summary  -->
                 <div id="summary" class="mt-4 bg-grey col-md-4 py-5 px-4 rounded">
-                    <h5 class="fw-bold">Reservation Summary</h5>
+                    <h5 class="fw-bold">Client Information</h5>
 
                     <div class="bg-white-outline px-2 pt-3 rounded my-4">
                         <div class="d-flex">
                             <div class="col">
-                                <p class="small simple-text fw-light">Check-in</p>
-                                <p class="fw-bold">Sun, 22 May 2024</p>
+                                <p class="small simple-text fw-light">Cedula</p>
+                                <p asp-for="Reservacion.Id_Cliente" class="fw-bold">@Model.Cliente.Cedula</p>
                             </div>
                             <p class="px-3 vertical-line"></p>
                             <div class="col">
-                                <p class="small simple-text fw-light">Check-out</p>
-                                <p class="fw-bold">Sun, 22 May 2024</p>
+                                <p class="small simple-text fw-light">Type</p>
+                                <p class="fw-bold">@Model.Cliente.Tipo_Cedula</p>
                             </div>
                         </div>
 
                         <div class="d-flex">
                             <div class="col">
-                                <p class="small simple-text fw-light">Type of Package</p>
-                                <p class="fw-bold">All included</p>
+                                <p class="small simple-text fw-light">Name</p>
+                                <p class="fw-bold">@Model.Cliente.Nombre</p>
                             </div>
                             <p class="px-3"></p>
                             <div class="col">
-                                <p class="small simple-text fw-light">Nights</p>
-                                <p class="fw-bold">2 nights</p>
-                            </div>
+                                <p class="small simple-text fw-light">Last Name</p>
+                                <p class="fw-bold">@Model.Cliente.Primer_Apellido @Model.Cliente.Segundo_Apellido</p>
+                            </div>                                                       
                         </div>
 
                         <div class="">
-                            <p class="small simple-text fw-light">Number of guests</p>
-                            <p class="fw-bold">4 people</p>
+                            <p class="small simple-text fw-light ">Contact</p>
+                            <p class="small fw-bold m-0">Telephone: <span class="fw-normal">@Model.Cliente.Telefono</span></p>
+                            <p class="small fw-bold m-0">Email: <span class="fw-normal">@Model.Cliente.Email</span></p>
+                            <p class="small fw-bold ">Address: <span class="fw-normal">@Model.Cliente.Direccion</span></p>
                         </div>
-                    </div>
+                    </div>                 
 
-                    <h6 class="fw-bold mt-2">Price Summary</h6>
-                    <div class="d-flex pb-0">
-                        <p class="flex-grow-1 simple-text">Guests</p>
-                        <p class="simple-text">$1600.00</p>
-                    </div>
-                    <div class="d-flex">
-                        <p class="flex-grow-1 simple-text">Discount</p>
-                        <p class="simple-text">- $99.99</p>
-                    </div>
-                    <div class="d-flex">
-                        <p class="flex-grow-1 simple-text">%Iva</p>
-                        <p class="simple-text">$16.84</p>
-                    </div>
-
-
-                    <div class="d-flex mt-3">
-                        <h6 class="fw-bold blue-text flex-grow-1 mb-1">Total Price</h6>
-                        <h6 class="fw-bold blue-text mb-1">$1 516,85</h6>
-                    </div>
-                    <div class="d-flex">
-                        <p class="fw-thin small blue-text flex-grow-1">Advance</p>
-                        <p class="fw-thin small blue-text">$794 829,85</p>
-                    </div>
                 </div>
             </div>
 

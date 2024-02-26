@@ -78,7 +78,7 @@ namespace APP_HotelBeachSA.Models
 
 
 
-                mail.To.Add("dianaqb09@gmail.com");
+                mail.To.Add(superReservacion.Cliente.Email);
                 mail.To.Add("beach.hotel.App@outlook.com");
 
                 // Adjuntar PDF

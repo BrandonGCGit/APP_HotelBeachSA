@@ -1,0 +1,94 @@
+﻿@model APP_HotelBeachSA.Models.Cliente
+
+@{
+    ViewData["Title"] = "BuscarCliente";
+    Layout = "~/Views/Shared/_ReservacionesLayout.cshtml";
+}
+
+
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <h1 class="mt-4">Reservation</h1>
+            @if (TempData["MensajeCedula"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Mensaje! </strong> @TempData["MensajeCedula"].
+                </div>
+
+            }
+            <!-- Container for Reservation Steps -->
+            <div class="mt-4 col-md-7">
+                <div class="d-flex">
+
+                    <div id="information-circle"
+                         class="circle d-flex justify-content-center align-items-center me-3">
+                        <p class="d-inline align-self-center fw-bold m-0">1</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <h6 class="lead d-inline align-middle fw-bold m-0">Information</h6>
+                    </div>
+
+                    <p class="d-inline align-self-center horizontal-line mx-4"></p>
+
+                    <div id="dates-circle" 
+                         class="circle-outline d-flex justify-content-center align-items-center me-3">
+                        <p class="d-inline align-self-center fw-bold m-0">2</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <h6 class="lead d-inline align-middle fw-bold m-0">Dates</h6>
+                    </div>
+
+                    <p class="d-inline align-self-center horizontal-line mx-4"></p>
+
+                    <div id="payment-circle"
+                         class="circle-outline d-flex justify-content-center align-items-center me-3">
+                        <p class="d-inline align-self-center fw-bold m-0">3</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <h6 class="lead d-inline align-middle fw-bold m-0">Payment</h6>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="row gap-4">
+
+                <div class="mt-4 d-block bg-grey col-md-7 p-5 rounded">
+
+
+                    <form asp-action="BuscarCliente">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <!-- Container for Dates and Guests -->
+                        <div id="dates">
+                            <h3 class="fw-bold">Please fill out the information</h3>
+                            
+                            <div class="mb-3 col-5">
+                                <label asp-for="Cedula" class="control-label pb-2">Cedula</label>
+                                <input asp-for="Cedula" class="form-control">
+                                <span asp-validation-for="Cedula" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit"
+                                    class="btn fw-bold btn-primary-org mt-4 px-4 me-2">  
+                                    Search
+                            </button>
+                            <a asp-controller="Reservaciones" asp-action="Index" class="btn fw-bold btn-primary-org-outline mt-4 px-4">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>                
+            </div>
+
+
+        </main>
+    </div>
+
+
+</body>
+
+
