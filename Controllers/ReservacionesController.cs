@@ -41,7 +41,7 @@ namespace APP_HotelBeachSA.Controllers
 
             gometaAPI = new GometaAPI();
 
-            clientGometa = gometaAPI.Inicial();            
+            clientGometa = gometaAPI.Inicial();
         }//constructor
 
 
@@ -82,7 +82,7 @@ namespace APP_HotelBeachSA.Controllers
         {
             Cliente pCliente = new Cliente();
             HttpResponseMessage respuesta = await httpClient.GetAsync($"/api/Clientes/Consultar?cedula={cedula}");
-            
+
             if (respuesta.IsSuccessStatusCode)
             {
                 var resultado = respuesta.Content.ReadAsStringAsync().Result;
@@ -96,7 +96,7 @@ namespace APP_HotelBeachSA.Controllers
 
 
             //Si el cliente ya se ha registrado
-            if(pCliente != null)
+            if (pCliente != null)
             {
                 idCliente = cedula;
                 superReservacion.Cliente = pCliente;
@@ -106,7 +106,7 @@ namespace APP_HotelBeachSA.Controllers
             else
             {
                 //Extraer los datos segun la cedula
-                if(await extraerDatosCedula(cedula))
+                if (await extraerDatosCedula(cedula))
                 {
                     //Crear objeto cliente con la informacion
                     Cliente nuevoCliente = new Cliente();
@@ -127,8 +127,8 @@ namespace APP_HotelBeachSA.Controllers
                 {
                     TempData["MensajeCedula"] = "No se logró encontrar la cédula";
                     return View();
-                }         
-            }           
+                }
+            }
             //return View(pCliente);
         }//BuscarCliente
 
@@ -151,7 +151,7 @@ namespace APP_HotelBeachSA.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegistrarCliente([Bind]Cliente pCliente)
+        public async Task<IActionResult> RegistrarCliente([Bind] Cliente pCliente)
         {
             pCliente.Fecha_Registro = DateTime.Now;
             if (ModelState.IsValid)
@@ -180,7 +180,7 @@ namespace APP_HotelBeachSA.Controllers
                 return View(pCliente);
             }
 
-            
+
         }//RegistrarCliente
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace APP_HotelBeachSA.Controllers
         }//CrearReservacion
 
 
-        
+
 
         /// <summary>
         /// Método para enviar guardar temporalmente los datos de la superReservación
@@ -254,9 +254,9 @@ namespace APP_HotelBeachSA.Controllers
             }
 
 
-                //Calculo de Noches
-                // Calcula la diferencia de días entre las fechas de entrada y salida
-                TimeSpan diferencia = superReservacion.Reservacion.Salida.Subtract(superReservacion.Reservacion.Entrada);
+            //Calculo de Noches
+            // Calcula la diferencia de días entre las fechas de entrada y salida
+            TimeSpan diferencia = superReservacion.Reservacion.Salida.Subtract(superReservacion.Reservacion.Entrada);
 
             // Obtiene la cantidad de noches redondeando hacia arriba
             int cantidadNoches = (int)Math.Ceiling(diferencia.TotalDays);
@@ -447,6 +447,7 @@ namespace APP_HotelBeachSA.Controllers
                         break;
                     //Card
                     case 'T':
+                        superReservacion.Pago.Numero_Pago = superReservacion.CardNumber;
                         superReservacion.TipoPago = "Card";
                         break;
                     //Check
@@ -641,8 +642,8 @@ namespace APP_HotelBeachSA.Controllers
                     // Convertir el JSON en un objeto anónimo para acceder a 'results'
                     var jsonObject = JsonConvert.DeserializeAnonymousType(result, new { results = new ClienteGometa[] { } });
 
-                    
-                    if(jsonObject.results != null)
+
+                    if (jsonObject.results != null)
                     {
                         //Se convierte el JSON en un Objeto TipoCambio
                         clienteGometa = jsonObject.results[0];
@@ -652,7 +653,7 @@ namespace APP_HotelBeachSA.Controllers
                     {
                         return false;
                     }
-                    
+
                 }
                 else
                 {

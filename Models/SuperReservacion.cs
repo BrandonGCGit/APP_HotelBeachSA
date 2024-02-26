@@ -11,6 +11,7 @@
         public Cheque Cheque { get; set; }
         public Discount Discount { get; set; }
 
+        public int CardNumber { get; set; }
         public decimal Adelanto { get; set; }
         public decimal CostoPersona { get; set; }
         public decimal CostoTotal { get; set; }

@@ -126,31 +126,31 @@ namespace APP_HotelBeachSA.Models
                                 </tr>
                                 <tr>
                                     <th>Cost per person </th>
-                                    <td>{superReservacion.CostoPersona}</td>
+                                    <td>{superReservacion.CostoPersona.ToString("0.00")}</td>
                                 </tr>
                                 <tr>
                                     <th>Total Cost  </th>
-                                    <td>{superReservacion.CostoTotal}</td>
+                                    <td>{superReservacion.CostoTotal.ToString("0.00")}</td>
                                 </tr>
                                 <tr>
                                     <th>Iva  </th>
-                                    <td>{superReservacion.Iva}</td>
+                                    <td>{superReservacion.Iva.ToString("0.00")}</td>
                                 </tr>
                                 <tr>
                                     <th>Discount   </th>
-                                    <td>{superReservacion.MontoDescuento}</td>
+                                    <td>{superReservacion.MontoDescuento.ToString("0.00")}</td>
                                 </tr>
                                 <tr>
                                     <th>Total Price    </th>
-                                    <td>{superReservacion.Reservacion.Total}</td>
+                                    <td>{superReservacion.Reservacion.Total.ToString("0.00")}</td>
                                 </tr>
                                 <tr>
                                     <th>Colones   </th>
-                                    <td>{superReservacion.MontoColones}</td>
+                                    <td>{superReservacion.MontoColones.ToString("0.00")}</td>
                                 </tr>
                                 <tr>
                                     <th>Advance    </th>
-                                    <td>{superReservacion.Adelanto}</td>
+                                    <td>{superReservacion.Adelanto.ToString("0.00")}</td>
                                 </tr>
                             </table>
                         </div>
