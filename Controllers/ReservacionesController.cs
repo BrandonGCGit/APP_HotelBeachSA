@@ -106,7 +106,7 @@ namespace APP_HotelBeachSA.Controllers
             else
             {
                 //Extraer los datos segun la cedula
-                if(!extraerDatosCedula(cedula).IsFaulted)
+                if(await extraerDatosCedula(cedula))
                 {
                     //Crear objeto cliente con la informacion
                     Cliente nuevoCliente = new Cliente();
@@ -641,10 +641,18 @@ namespace APP_HotelBeachSA.Controllers
                     // Convertir el JSON en un objeto anónimo para acceder a 'results'
                     var jsonObject = JsonConvert.DeserializeAnonymousType(result, new { results = new ClienteGometa[] { } });
 
-
-                    //Se convierte el JSON en un Objeto TipoCambio
-                    clienteGometa = jsonObject.results[0];
-                    return true;
+                    
+                    if(jsonObject.results != null)
+                    {
+                        //Se convierte el JSON en un Objeto TipoCambio
+                        clienteGometa = jsonObject.results[0];
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
                 }
                 else
                 {
@@ -653,7 +661,8 @@ namespace APP_HotelBeachSA.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                TempData["MensajeCedula"] = "Error al registrar la cédula";
+                return false;
             }
         }
 
